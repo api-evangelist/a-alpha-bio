@@ -1,0 +1,111 @@
+generated: '2026-08-06'
+method: derived
+source: openapi/a-alpha-bio-atlas-data-product-openapi-original.json
+docs: null
+docs_note: >-
+  A-Alpha Bio publishes no compliance, trust-center or standards-conformance page. Every entry below is asserted from
+  the machine-readable specification the API serves plus live probes on 2026-08-06 — none of it is a claim the
+  company itself makes.
+api: Atlas Data Product API
+standards:
+- id: openapi
+  name: OpenAPI Specification
+  version: 3.1.0
+  conforms: true
+  evidence: >-
+    The API serves a parseable OpenAPI 3.1.0 document at https://api.atlas.aalphabio.com/openapi.json (HTTP 200,
+    application/json, 24,726 bytes). Every one of the nine operations carries an operationId, a summary, a
+    description, tags and enumerated responses.
+- id: oauth2
+  name: OAuth 2.0
+  conforms: partial
+  evidence: >-
+    Tokens are obtained through an AWS Cognito hosted-UI authorization-code flow configured in the Atlas web client
+    (https://atlas.aalphabio.com/assets/App-DfcS_Q-d.js). The API itself declares only `http bearer` and publishes no
+    OAuth metadata — /.well-known/oauth-authorization-server and /.well-known/oauth-protected-resource both 404 on
+    api.atlas.aalphabio.com. A client cannot discover the authorization server from the API.
+- id: oidc
+  name: OpenID Connect
+  conforms: partial
+  evidence: >-
+    The web client requests the `openid`, `email` and `profile` scopes against a Cognito user pool, so OIDC is in use
+    upstream. No /.well-known/openid-configuration is reachable on any A-Alpha Bio host
+    (api.atlas.aalphabio.com 404; www.aalphabio.com 404; atlas.aalphabio.com answers its SPA shell for every path).
+- id: rfc9457
+  name: RFC 9457 Problem Details for HTTP APIs
+  conforms: false
+  evidence: >-
+    Errors are the FastAPI default `{"detail": ...}` envelope served as application/json, not application/problem+json.
+    No type/title/status/instance members. Verified: 401 {"detail":"Missing token"}, 404 {"detail":"Dataset not
+    found"}, 422 {"detail":[{type,loc,msg,input}]}.
+- id: rfc9116
+  name: RFC 9116 security.txt
+  conforms: false
+  evidence: >-
+    /.well-known/security.txt returns 404 on api.atlas.aalphabio.com and www.aalphabio.com. atlas.aalphabio.com
+    returns HTTP 200 for that path but the body is the byte-identical 874-byte SPA shell it returns for a
+    known-nonexistent control path, so it is a soft 404, not a security.txt.
+- id: rfc8594
+  name: RFC 8594 Sunset Header
+  conforms: false
+  evidence: No Sunset or Deprecation headers observed on any probed response; no deprecation policy published.
+- id: pagination
+  name: Collection pagination
+  conforms: false
+  evidence: >-
+    `GET /api/v1/datasets` returns the whole collection in `objects[]` with no limit/offset/cursor/next member and no
+    Link header.
+- id: idempotency
+  name: Idempotency keys for unsafe methods
+  conforms: not-applicable
+  evidence: All nine operations are GET. There are no unsafe methods, so no idempotency key is required.
+- id: rate-limit-headers
+  name: RateLimit header fields for HTTP
+  conforms: false
+  evidence: No RateLimit-*, X-RateLimit-* or Retry-After headers on any probed 200; no 429 documented.
+- id: json-schema
+  name: JSON Schema (2020-12, via OpenAPI 3.1)
+  conforms: true
+  evidence: >-
+    OpenAPI 3.1.0 schema objects are JSON Schema 2020-12. 22 component schemas are defined and every documented
+    response body is $ref'd to one, except `getDatasetData`'s 200 which is an empty schema.
+- id: tls
+  name: TLS 1.2+ on all public hosts
+  conforms: true
+  evidence: >-
+    Probed 2026-08-06 — www.aalphabio.com TLSv1.3, atlas.aalphabio.com TLSv1.3, api.atlas.aalphabio.com TLSv1.2. See
+    security/a-alpha-bio-domain-security.yml.
+- id: hsts
+  name: HTTP Strict Transport Security
+  conforms: partial
+  evidence: >-
+    www.aalphabio.com sets HSTS with max-age=31536000. atlas.aalphabio.com does not set HSTS, and no HSTS header was
+    observed on api.atlas.aalphabio.com — the two hosts that actually carry authenticated traffic.
+- id: dnssec
+  name: DNSSEC
+  conforms: false
+  evidence: No DNSKEY records for aalphabio.com.
+- id: caa
+  name: CAA records
+  conforms: false
+  evidence: No CAA records for aalphabio.com.
+- id: spf-dmarc
+  name: SPF + DMARC
+  conforms: true
+  evidence: SPF present; DMARC present with policy `reject`.
+compliance_claims:
+  published: false
+  detail: >-
+    No SOC 2, ISO 27001, HIPAA, GxP, 21 CFR Part 11 or other certification is claimed on any public A-Alpha Bio page
+    found by this pass, and probe-security-programs.py found no trust center. Notable for a company that holds US
+    Department of Defense contracts and runs pharmaceutical partnerships — the absence is a publication gap, not
+    necessarily a controls gap.
+sector_context:
+  industry: biotechnology / life-sciences research data
+  regimes_not_applicable:
+  - id: hipaa
+    reason: >-
+      Atlas publishes protein sequence and binding-affinity measurements from engineered yeast-display experiments.
+      No human subject data, no PHI, no clinical records pass through this API.
+  - id: gdpr-data-subject-api
+    reason: The API exposes no personal data — only dataset metadata and experimental measurements.

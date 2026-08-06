@@ -1,0 +1,140 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements — A-Alpha Bio Atlas Data Product API
+  version: 1.0.0
+x-generated: '2026-08-06'
+x-method: generated
+x-source: openapi/a-alpha-bio-atlas-data-product-openapi-original.json
+x-note: >-
+  Captures API Evangelist's additions to the harvested specification. The harvested document at
+  openapi/a-alpha-bio-atlas-data-product-openapi-original.json is never mutated. Everything asserted here was either
+  observed on the live API on 2026-08-06 or derived from the specification itself.
+extends: openapi/a-alpha-bio-atlas-datasets-openapi.yml
+actions:
+- target: $.info
+  description: >-
+    Add a description, contact and provenance to an info block that carried only a title and a 0.0.x build number.
+  update:
+    description: >-
+      The HTTP API behind Atlas, A-Alpha Bio's protein-protein interaction data platform. Nine read operations over
+      Atlas "Data Blocks" — versioned datasets of quantitative binding measurements produced on the AlphaSeq
+      yeast-mating platform. Dataset discovery, dataset metadata and structured Data Cards answer anonymously; CSV
+      data, CSV schemas and structure (.cif) files require an HTTP bearer token obtained through Atlas sign-in.
+    contact:
+      name: A-Alpha Bio
+      url: https://www.aalphabio.com/contact/
+    x-api-evangelist:
+      profile: https://github.com/api-evangelist/a-alpha-bio
+      harvested: '2026-08-06'
+      harvested_from: https://api.atlas.aalphabio.com/openapi.json
+- target: $
+  description: >-
+    Declare the production server. The harvested document ships no servers[] at all, so a generated client has no base
+    URL. The host below is the one that serves this very specification and every /api/v1 path, and is named in the
+    preconnect hint of the Atlas SPA shell at https://atlas.aalphabio.com/.
+  update:
+    servers:
+    - url: https://api.atlas.aalphabio.com
+      description: Atlas Data Product API production host
+- target: $
+  description: >-
+    Declare the single tag used by every operation. The harvested document tags all nine operations "Datasets" but
+    never declares the tag, so no description reaches a docs renderer.
+  update:
+    tags:
+    - name: Datasets
+      description: >-
+        Atlas Data Blocks — dataset discovery, metadata, Data Cards, CSV data, CSV schema and structure (.cif) files.
+- target: $.paths['/api/v1/datasets'].get
+  description: >-
+    Record the observed anonymous-access behaviour. This is the single most consequential undocumented fact about the
+    API: with the default flags an unauthenticated caller receives an EMPTY objects array, and the public licensable
+    catalogue only appears when include_locked=true is set.
+  update:
+    x-anonymous-access: true
+    x-anonymous-note: >-
+      Verified 2026-08-06 — returns 200 with no Authorization header. With default flags the result is
+      {"objects":[]}. Pass include_locked=true (and include_coming_soon=true for teasers) to retrieve the public
+      catalogue; 16 records were returned on that date.
+    x-evidence:
+      url: https://api.atlas.aalphabio.com/api/v1/datasets?include_locked=true&include_coming_soon=true
+      http_status: 200
+      fetched: '2026-08-06'
+      example_file: examples/a-alpha-bio-list-datasets-response.json
+- target: $.paths['/api/v1/datasets/{id}'].get
+  update:
+    x-anonymous-access: true
+    x-evidence:
+      url: https://api.atlas.aalphabio.com/api/v1/datasets/ab1001
+      http_status: 200
+      fetched: '2026-08-06'
+      example_file: examples/a-alpha-bio-get-dataset-response.json
+- target: $.paths['/api/v1/datasets/{id}/datacard'].get
+  update:
+    x-anonymous-access: true
+    x-evidence:
+      url: https://api.atlas.aalphabio.com/api/v1/datasets/ab1001/datacard
+      http_status: 200
+      fetched: '2026-08-06'
+      example_file: examples/a-alpha-bio-get-dataset-datacard-response.json
+- target: $.paths['/api/v1/datasets/{id}/data'].get
+  description: Record that this operation is entitlement-gated and what the gate returns.
+  update:
+    x-anonymous-access: false
+    x-evidence:
+      url: https://api.atlas.aalphabio.com/api/v1/datasets/ab1001/data
+      http_status: 401
+      body: '{"detail":"Missing token"}'
+      fetched: '2026-08-06'
+- target: $.paths['/api/v1/datasets/{id}/schema'].get
+  update:
+    x-anonymous-access: false
+    x-evidence:
+      url: https://api.atlas.aalphabio.com/api/v1/datasets/ab1001/schema
+      http_status: 401
+      body: '{"detail":"Missing token"}'
+      fetched: '2026-08-06'
+- target: $.paths['/api/v1/datasets/{id}/structures'].get
+  update:
+    x-anonymous-access: false
+    x-evidence:
+      url: https://api.atlas.aalphabio.com/api/v1/datasets/ab1001/structures
+      http_status: 401
+      body: '{"detail":"Missing token"}'
+      fetched: '2026-08-06'
+- target: $.components.securitySchemes.HTTPBearer
+  description: >-
+    Name the token issuer. The harvested scheme says only "http/bearer", which tells a developer nothing about how to
+    obtain one.
+  update:
+    bearerFormat: JWT
+    description: >-
+      AWS Cognito access token. Obtained through the Cognito hosted-UI authorization-code flow that the Atlas web
+      client runs (scopes openid, email, profile, aws.cognito.signin.user.admin), or through the browser-assisted
+      login-code flow at https://atlas.aalphabio.com/cli-login for the Atlas CLI client.
+    x-source: https://atlas.aalphabio.com/assets/App-DfcS_Q-d.js
+- target: $.components.schemas.DatasetItem.properties.url
+  description: >-
+    Flag a stale example. The harvested example points at a legacy host that is not the one live responses return.
+  update:
+    x-observed-example: https://atlas.aalphabio.com/dataset/ab1001
+    x-note: >-
+      The specification's example uses https://data.aalphabio.tools/dataset/ab1001, but live responses on 2026-08-06
+      returned https://atlas.aalphabio.com/dataset/<id>. Treat the specification example as stale.
+- target: $
+  description: >-
+    Record the undocumented liveness endpoint the API host actually serves, and the error-envelope shape, so an agent
+    reading only the spec is not surprised by either.
+  update:
+    x-undocumented-endpoints:
+    - path: /health
+      method: get
+      http_status: 200
+      body: '{"status":"ok"}'
+      note: Answers publicly but does not appear in paths.
+    x-error-envelope:
+      format: vendor-json
+      media_type: application/json
+      rfc9457: false
+      shape: '{"detail": <string>}, except 422 where detail is an array of Pydantic ValidationError objects'
+      see: errors/a-alpha-bio-problem-types.yml

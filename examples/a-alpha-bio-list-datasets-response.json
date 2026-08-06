@@ -1,0 +1,831 @@
+{
+  "objects": [
+    {
+      "id": "ab673",
+      "name": "VHH72 × SARS-CoV-2 RBD — AlphaBind optimization",
+      "experiment": "AlphaBind-designed VHH72 variants optimized against SARS-CoV-2 RBD, with 75% containing 4+ mutations from parent. Tested against a panel of 8 CoV-related antigens for cross-reactivity analysis.",
+      "details": "- Sequence diversity: >28,000 unique VHH designs, with >75% of tested designs containing 4+ mutations away from parent\n- Target diversity: 8 targets tested, including diverse variants of CoV-1 and CoV-2 RBD\n- Scale: >226,000 unique VHH x antigen interactions\n- Suitable for: affinity regressors, affinity optimization, generalizability testing to unseen targets\n",
+      "modes": [
+        {
+          "name": "source",
+          "file_type": "csv.gz"
+        },
+        {
+          "name": "ml",
+          "file_type": "csv.gz"
+        }
+      ],
+      "release_date": "2026-05-25",
+      "version": "1",
+      "status": "published",
+      "locked": true,
+      "coming_soon": false,
+      "url": "https://atlas.aalphabio.com/dataset/ab673",
+      "structure_count": 0,
+      "tasks": [
+        "optimization",
+        "cross-target generalization",
+        "affinity prediction"
+      ],
+      "binder": "VHH",
+      "target": [
+        "viral",
+        "natural proteins"
+      ],
+      "product": "atlas-vhh",
+      "product_display_name": "Atlas-VHH Consortium",
+      "product_kind": "consortium",
+      "source": "VHH Q2 2026",
+      "a_size": 28338,
+      "alpha_size": 8,
+      "total_ppi_count": 312026,
+      "unique_ppi_count": 226704,
+      "density": 0.41,
+      "tags": [
+        "SSM"
+      ],
+      "has_tutorial": false
+    },
+    {
+      "id": "ab1001",
+      "name": "VHH72 dSSM — paratope × epitope, SARS-CoV-1 RBD",
+      "experiment": "Deep site-saturation mutagenesis of the VHH72 paratope (>600 mutations, >30 positions) crossed against a SARS-CoV-1 RBD epitope library (>2,000 mutations, >100 positions), yielding >1M protein-protein interactions for local affinity landscape mapping.",
+      "details": "- Paratope coverage: >600 mutations across >30 paratope positions\n- Epitope coverage: >2,000 mutations across >100 epitope positions\n- Scale: >1,000,000 protein–protein interactions (PPIs)\n- Suitable for: affinity regressors, affinity optimization, exploring antigen sensitivity to a VHH\n",
+      "modes": [
+        {
+          "name": "source",
+          "file_type": "csv.gz"
+        },
+        {
+          "name": "ml",
+          "file_type": "csv.gz"
+        }
+      ],
+      "release_date": "2026-05-25",
+      "version": "1",
+      "status": "published",
+      "locked": true,
+      "coming_soon": false,
+      "url": "https://atlas.aalphabio.com/dataset/ab1001",
+      "structure_count": 0,
+      "tasks": [
+        "optimization",
+        "affinity prediction"
+      ],
+      "binder": "VHH",
+      "target": [
+        "viral",
+        "natural proteins",
+        "COVID"
+      ],
+      "product": "atlas-vhh",
+      "product_display_name": "Atlas-VHH Consortium",
+      "product_kind": "consortium",
+      "source": "VHH Q2 2026",
+      "a_size": 655,
+      "alpha_size": 2344,
+      "total_ppi_count": 1718344,
+      "unique_ppi_count": 1535320,
+      "density": 0.52,
+      "tags": [
+        "cross-reactivity",
+        "dSSM",
+        "optimization",
+        "VHH72"
+      ],
+      "has_tutorial": false
+    },
+    {
+      "id": "ab1479",
+      "name": "Inverse Folding Models Benchmark — VHH72 (6WAQ) & anti-4-1BB (7D4B)",
+      "experiment": "Systematic benchmark of 8 inverse folding models (AbMPNN, ProteinMPNN, SaProt, AntiFold) on two VHH crystal structures, generating >40K designs validated against 3 targets via AlphaSeq. Only about 6% of designs match or exceed parental binding across all systems.",
+      "details": "- Total designs: >15K designs per target, >40K total designs\n- Targets: 3 targets (CoV-1 RBD, CoV-2 RBD, 4-1BB)\n- Models tested: 8 inverse folding models ([AbMPNN](https://arxiv.org/abs/2310.19513), [proteinMPNN](https://www.science.org/doi/10.1126/science.add2187), [SaProt](https://openreview.net/forum?id=6MRm3G4NiU), [AntiFold](https://academic.oup.com/bioinformaticsadvances/article/5/1/vbae202/8090019))\n- Scale: >40K validated designs\n- Suitable for: binder/non-binder classification, benchmarking IF models, testing design robustness across orthologs\n",
+      "modes": [
+        {
+          "name": "source",
+          "file_type": "csv.gz"
+        },
+        {
+          "name": "ml",
+          "file_type": "csv.gz"
+        }
+      ],
+      "release_date": "2026-05-25",
+      "version": "1",
+      "status": "published",
+      "locked": true,
+      "coming_soon": false,
+      "url": "https://atlas.aalphabio.com/dataset/ab1479",
+      "structure_count": 0,
+      "tasks": [
+        "cross-target generalization",
+        "classification",
+        "benchmarking"
+      ],
+      "binder": "VHH",
+      "target": [
+        "viral",
+        "natural proteins",
+        "COVID",
+        "4-1BB"
+      ],
+      "product": "atlas-vhh",
+      "product_display_name": "Atlas-VHH Consortium",
+      "product_kind": "consortium",
+      "source": "VHH Q2 2026",
+      "a_size": 45108,
+      "alpha_size": 3,
+      "total_ppi_count": 335718,
+      "unique_ppi_count": 135324,
+      "density": 0.1,
+      "tags": [
+        "anti 4-1BB",
+        "cross-reactivity",
+        "design",
+        "higher-order mutants",
+        "inverse folding",
+        "VHH72"
+      ],
+      "has_tutorial": false
+    },
+    {
+      "id": "ab1614",
+      "name": "Synthetic Epitope Proteins (SEPs) — de novo minibinder pseudo-structures",
+      "experiment": "25,448 synthetic epitope proteins designed via RFDiffusion + ProteinMPNN + Boltz-2, targeting 55 VHH parents and >250 antigen sequences. Includes ~1.4M AlphaSeq-validated PPIs, and comprehensive structure-confidence metrics (pTM, iPTM, pLDDT, ipSAE, pDockQ).",
+      "details": "- VHHs sampled: 55 parent VHHs\n- SEPs sampled: 25,448 synthetic epitope proteins and over 250 unique antigen sequences\n- Scale: ~1.5M non-control interactions, 25,448 on-target interactions, ~1.4M off-target interactions\n- Includes: Predicted VHH-SEP complex structures (CIF files)\n- Suitable for: structure prediction, design filtering, de novo antibody design\n",
+      "modes": [
+        {
+          "name": "source",
+          "file_type": "csv.gz"
+        },
+        {
+          "name": "ml",
+          "file_type": "csv.gz"
+        }
+      ],
+      "release_date": "2026-05-25",
+      "version": "1",
+      "status": "published",
+      "locked": true,
+      "coming_soon": false,
+      "url": "https://atlas.aalphabio.com/dataset/ab1614",
+      "structure_count": 25448,
+      "tasks": [
+        "design",
+        "benchmarking"
+      ],
+      "binder": "VHH",
+      "target": [
+        "SEP",
+        "minibinder"
+      ],
+      "product": "atlas-vhh",
+      "product_display_name": "Atlas-VHH Consortium",
+      "product_kind": "consortium",
+      "source": "VHH Q2 2026",
+      "a_size": 55,
+      "alpha_size": 25709,
+      "total_ppi_count": 1506318,
+      "unique_ppi_count": 1413995,
+      "density": 0.41,
+      "tags": [
+        "design",
+        "minibinder",
+        "pseudo structure",
+        "SAbDab-nano",
+        "SEP"
+      ],
+      "has_tutorial": false
+    },
+    {
+      "id": "ab1628",
+      "name": "SAbDab-nano Local VHH Mutations × 118 Native Antigens",
+      "experiment": "ESM-filtered site-saturation mutagenesis of 184 VHH parents from SAbDab-nano crystal structures, yielding 11.9K unique VHH variants tested against 118 native antigens. 1.5M PPIs spanning on-target and off-target interactions for local affinity landscape analysis at scale.",
+      "details": "- VHHs sampled: 184 parent VHHs + ~30-100 point mutations each (~11.9K unique VHHs)\n- Antigens sampled: 118 antigens\n- Scale: 1.5M PPIs, >12K on-target interactions\n- Suitable for: affinity optimization, ML model training/validation, physics-based benchmarking\n",
+      "modes": [
+        {
+          "name": "source",
+          "file_type": "csv.gz"
+        },
+        {
+          "name": "ml",
+          "file_type": "csv.gz"
+        }
+      ],
+      "release_date": "2026-05-25",
+      "version": "1",
+      "status": "published",
+      "locked": true,
+      "coming_soon": false,
+      "url": "https://atlas.aalphabio.com/dataset/ab1628",
+      "structure_count": 0,
+      "tasks": [
+        "optimization",
+        "design",
+        "cross-target generalization",
+        "benchmarking",
+        "affinity prediction"
+      ],
+      "binder": "VHH",
+      "target": [
+        "SAbDab-nano",
+        "natural proteins"
+      ],
+      "product": "atlas-vhh",
+      "product_display_name": "Atlas-VHH Consortium",
+      "product_kind": "consortium",
+      "source": "VHH Q2 2026",
+      "a_size": 11908,
+      "alpha_size": 118,
+      "total_ppi_count": 1536519,
+      "unique_ppi_count": 1405144,
+      "density": 0.04,
+      "tags": [
+        "design",
+        "SAbDab-nano",
+        "SSM"
+      ],
+      "has_tutorial": false
+    },
+    {
+      "id": "ab1759",
+      "name": "Synthetic Epitope Proteins (SEPs) — de novo minibinder pseudo-structures with VHH single-mutant landscape",
+      "experiment": "1,894 synthetic epitope proteins designed via RFDiffusion + ProteinMPNN + Boltz-2, targeting 21 parent VHHs plus single point mutants of each. Includes ~2.45M AlphaSeq-validated PPIs and predicted VHH-SEP complex structures with comprehensive confidence metrics (pTM, iPTM, pLDDT, ipSAE, pDockQ).",
+      "details": "- VHHs sampled: 21 parent VHHs plus single point mutants (1,288 unique VHH sequences; 27-94 per parent, median 60)\n- SEPs sampled: 1,894 synthetic epitope proteins\n- Scale: ~2.45M non-control interactions (1,888 parental on-target + 111,615 mutant on-target + ~2.32M off-target)\n- Hits (`alphaseq_affinity < 3`): 884 (18 parental + 866 mutant)\n- Includes: predicted VHH-SEP complex structures for parental on-target PPIs (best model by ipSAE)\n- Suitable for: structure prediction, design filtering, de novo antibody design, VHH single-mutant affinity modeling\n",
+      "modes": [
+        {
+          "name": "source",
+          "file_type": "csv.gz"
+        },
+        {
+          "name": "ml",
+          "file_type": "csv.gz"
+        }
+      ],
+      "release_date": "2026-12-31",
+      "version": "1",
+      "status": "coming_soon",
+      "locked": true,
+      "coming_soon": true,
+      "url": "https://atlas.aalphabio.com/dataset/ab1759",
+      "structure_count": 1888,
+      "tasks": [
+        "optimization",
+        "design",
+        "benchmarking",
+        "affinity prediction"
+      ],
+      "binder": "VHH",
+      "target": [
+        "SEP",
+        "SAbDab-nano",
+        "minibinder"
+      ],
+      "product": "licensable",
+      "product_display_name": "Licensable",
+      "product_kind": "licensable",
+      "source": "Expected Q3–Q4",
+      "a_size": 1288,
+      "alpha_size": 1891,
+      "total_ppi_count": 2447048,
+      "unique_ppi_count": 1811177,
+      "density": 0.7436,
+      "tags": [
+        "design",
+        "minibinder",
+        "pseudo structure",
+        "SAbDab-nano",
+        "SEP",
+        "SSM"
+      ],
+      "has_tutorial": false
+    },
+    {
+      "id": "ab1760",
+      "name": "Synthetic Epitope Proteins (SEPs) — de novo minibinder pseudo-structures with VHH single-mutant landscape",
+      "experiment": "1,787 synthetic epitope proteins designed via RFDiffusion + ProteinMPNN + Boltz-2, targeting 21 parent VHHs plus single point mutants of each. Includes ~2.43M AlphaSeq-validated PPIs and predicted VHH-SEP complex structures with comprehensive confidence metrics (pTM, iPTM, pLDDT, ipSAE, pDockQ).",
+      "details": "- VHHs sampled: 21 parent VHHs plus single point mutants (1,355 unique VHH sequences; 36-111 per parent, median 62)\n- SEPs sampled: 1,787 synthetic epitope proteins\n- Scale: ~2.43M non-control interactions (1,784 parental on-target + 114,729 mutant on-target + ~2.3M off-target)\n- Hits (`alphaseq_affinity < 3`): 830 (18 parental + 812 mutant)\n- Includes: predicted VHH-SEP complex structures for parental on-target PPIs (best model by ipSAE)\n- Suitable for: structure prediction, design filtering, de novo antibody design, VHH single-mutant affinity modeling\n",
+      "modes": [
+        {
+          "name": "source",
+          "file_type": "csv.gz"
+        },
+        {
+          "name": "ml",
+          "file_type": "csv.gz"
+        }
+      ],
+      "release_date": "2026-12-31",
+      "version": "1",
+      "status": "coming_soon",
+      "locked": true,
+      "coming_soon": true,
+      "url": "https://atlas.aalphabio.com/dataset/ab1760",
+      "structure_count": 1784,
+      "tasks": [
+        "optimization",
+        "design",
+        "benchmarking",
+        "affinity prediction"
+      ],
+      "binder": "VHH",
+      "target": [
+        "SEP",
+        "SAbDab-nano",
+        "minibinder"
+      ],
+      "product": "licensable",
+      "product_display_name": "Licensable",
+      "product_kind": "licensable",
+      "source": "Expected Q3–Q4",
+      "a_size": 1355,
+      "alpha_size": 1784,
+      "total_ppi_count": 2426746,
+      "unique_ppi_count": 1960858,
+      "density": 0.8112,
+      "tags": [
+        "design",
+        "minibinder",
+        "pseudo structure",
+        "SAbDab-nano",
+        "SEP",
+        "SSM"
+      ],
+      "has_tutorial": false
+    },
+    {
+      "id": "ab1761",
+      "name": "Synthetic Epitope Proteins (SEPs) — de novo minibinder pseudo-structures with VHH single-mutant landscape",
+      "experiment": "2,090 synthetic epitope proteins designed via RFDiffusion + ProteinMPNN + Boltz-2, targeting 24 parent VHHs plus single point mutants of each. Includes ~3.02M AlphaSeq-validated PPIs and predicted VHH-SEP complex structures with comprehensive confidence metrics (pTM, iPTM, pLDDT, ipSAE, pDockQ).",
+      "details": "- VHHs sampled: 24 parent VHHs plus single point mutants (1,444 unique VHH sequences; 27-93 per parent, median 56)\n- SEPs sampled: 2,090 synthetic epitope proteins\n- Scale: ~3.02M non-control interactions (2,087 parental on-target + 123,220 mutant on-target + ~2.89M off-target)\n- Hits (`alphaseq_affinity < 3`): 2,564 (51 parental + 2,513 mutant)\n- Includes: predicted VHH-SEP complex structures for parental on-target PPIs (best model by ipSAE)\n- Suitable for: structure prediction, design filtering, de novo antibody design, VHH single-mutant affinity modeling\n",
+      "modes": [
+        {
+          "name": "source",
+          "file_type": "csv.gz"
+        },
+        {
+          "name": "ml",
+          "file_type": "csv.gz"
+        }
+      ],
+      "release_date": "2026-12-31",
+      "version": "1",
+      "status": "coming_soon",
+      "locked": true,
+      "coming_soon": true,
+      "url": "https://atlas.aalphabio.com/dataset/ab1761",
+      "structure_count": 2087,
+      "tasks": [
+        "optimization",
+        "design",
+        "benchmarking",
+        "affinity prediction"
+      ],
+      "binder": "VHH",
+      "target": [
+        "SEP",
+        "SAbDab-nano",
+        "minibinder"
+      ],
+      "product": "licensable",
+      "product_display_name": "Licensable",
+      "product_kind": "licensable",
+      "source": "Expected Q3–Q4",
+      "a_size": 1444,
+      "alpha_size": 2087,
+      "total_ppi_count": 3024230,
+      "unique_ppi_count": 2054672,
+      "density": 0.6818,
+      "tags": [
+        "design",
+        "minibinder",
+        "pseudo structure",
+        "SAbDab-nano",
+        "SEP",
+        "SSM"
+      ],
+      "has_tutorial": false
+    },
+    {
+      "id": "ab1762",
+      "name": "Synthetic Epitope Proteins (SEPs) — de novo minibinder pseudo-structures with VHH single-mutant landscape",
+      "experiment": "2,249 synthetic epitope proteins designed via RFDiffusion + ProteinMPNN + Boltz-2, targeting 18 parent VHHs plus single point mutants of each. Includes ~2.42M AlphaSeq-validated PPIs and predicted VHH-SEP complex structures with comprehensive confidence metrics (pTM, iPTM, pLDDT, ipSAE, pDockQ).",
+      "details": "- VHHs sampled: 18 parent VHHs plus single point mutants (1,071 unique VHH sequences; 28-86 per parent, median 55)\n- SEPs sampled: 2,249 synthetic epitope proteins\n- Scale: ~2.42M non-control interactions (2,245 parental on-target + 146,712 mutant on-target + ~2.26M off-target)\n- Hits (`alphaseq_affinity < 3`): 1,129 (21 parental + 1,108 mutant)\n- Includes: predicted VHH-SEP complex structures for parental on-target PPIs (best model by ipSAE)\n- Suitable for: structure prediction, design filtering, de novo antibody design, VHH single-mutant affinity modeling\n",
+      "modes": [
+        {
+          "name": "source",
+          "file_type": "csv.gz"
+        },
+        {
+          "name": "ml",
+          "file_type": "csv.gz"
+        }
+      ],
+      "release_date": "2026-12-31",
+      "version": "1",
+      "status": "coming_soon",
+      "locked": true,
+      "coming_soon": true,
+      "url": "https://atlas.aalphabio.com/dataset/ab1762",
+      "structure_count": 2245,
+      "tasks": [
+        "optimization",
+        "design",
+        "benchmarking",
+        "affinity prediction"
+      ],
+      "binder": "VHH",
+      "target": [
+        "SEP",
+        "SAbDab-nano",
+        "minibinder"
+      ],
+      "product": "licensable",
+      "product_display_name": "Licensable",
+      "product_kind": "licensable",
+      "source": "Expected Q3–Q4",
+      "a_size": 1071,
+      "alpha_size": 2246,
+      "total_ppi_count": 2415426,
+      "unique_ppi_count": 2044951,
+      "density": 0.8501,
+      "tags": [
+        "design",
+        "minibinder",
+        "pseudo structure",
+        "SAbDab-nano",
+        "SEP",
+        "SSM"
+      ],
+      "has_tutorial": false
+    },
+    {
+      "id": "ab1763",
+      "name": "Synthetic Epitope Proteins (SEPs) — de novo minibinder pseudo-structures with VHH single-mutant landscape",
+      "experiment": "2,116 synthetic epitope proteins designed via RFDiffusion + ProteinMPNN + Boltz-2, targeting 18 parent VHHs plus single point mutants of each. Includes ~2.39M AlphaSeq-validated PPIs and predicted VHH-SEP complex structures with comprehensive confidence metrics (pTM, iPTM, pLDDT, ipSAE, pDockQ).",
+      "details": "- VHHs sampled: 18 parent VHHs plus single point mutants (1,126 unique VHH sequences; 42-99 per parent, median 58)\n- SEPs sampled: 2,116 synthetic epitope proteins\n- Scale: ~2.39M non-control interactions (2,113 parental on-target + 137,758 mutant on-target + ~2.24M off-target)\n- Hits (`alphaseq_affinity < 3`): 1,298 (35 parental + 1,263 mutant)\n- Includes: predicted VHH-SEP complex structures for parental on-target PPIs (best model by ipSAE)\n- Suitable for: structure prediction, design filtering, de novo antibody design, VHH single-mutant affinity modeling\n",
+      "modes": [
+        {
+          "name": "source",
+          "file_type": "csv.gz"
+        },
+        {
+          "name": "ml",
+          "file_type": "csv.gz"
+        }
+      ],
+      "release_date": "2026-12-31",
+      "version": "1",
+      "status": "coming_soon",
+      "locked": true,
+      "coming_soon": true,
+      "url": "https://atlas.aalphabio.com/dataset/ab1763",
+      "structure_count": 2113,
+      "tasks": [
+        "optimization",
+        "design",
+        "benchmarking",
+        "affinity prediction"
+      ],
+      "binder": "VHH",
+      "target": [
+        "SEP",
+        "SAbDab-nano",
+        "minibinder"
+      ],
+      "product": "licensable",
+      "product_display_name": "Licensable",
+      "product_kind": "licensable",
+      "source": "Expected Q3–Q4",
+      "a_size": 1126,
+      "alpha_size": 2113,
+      "total_ppi_count": 2388964,
+      "unique_ppi_count": 1611421,
+      "density": 0.6773,
+      "tags": [
+        "design",
+        "minibinder",
+        "pseudo structure",
+        "SAbDab-nano",
+        "SEP",
+        "SSM"
+      ],
+      "has_tutorial": false
+    },
+    {
+      "id": "ab1764",
+      "name": "Synthetic Epitope Proteins (SEPs) — de novo minibinder pseudo-structures with VHH single-mutant landscape",
+      "experiment": "1,818 synthetic epitope proteins designed via RFDiffusion + ProteinMPNN + Boltz-2, targeting 18 parent VHHs plus single point mutants of each. Includes ~2.37M AlphaSeq-validated PPIs and predicted VHH-SEP complex structures with comprehensive confidence metrics (pTM, iPTM, pLDDT, ipSAE, pDockQ).",
+      "details": "- VHHs sampled: 18 parent VHHs plus single point mutants (1,301 unique VHH sequences; 33-111 per parent, median 70)\n- SEPs sampled: 1,818 synthetic epitope proteins\n- Scale: ~2.37M non-control interactions (1,795 parental on-target + 124,448 mutant on-target + ~2.24M off-target)\n- Hits (`alphaseq_affinity < 3`): 3,743 (144 parental + 3,599 mutant)\n- Includes: predicted VHH-SEP complex structures for parental on-target PPIs (best model by ipSAE)\n- Suitable for: structure prediction, design filtering, de novo antibody design, VHH single-mutant affinity modeling\n",
+      "modes": [
+        {
+          "name": "source",
+          "file_type": "csv.gz"
+        },
+        {
+          "name": "ml",
+          "file_type": "csv.gz"
+        }
+      ],
+      "release_date": "2026-12-31",
+      "version": "1",
+      "status": "coming_soon",
+      "locked": true,
+      "coming_soon": true,
+      "url": "https://atlas.aalphabio.com/dataset/ab1764",
+      "structure_count": 1795,
+      "tasks": [
+        "optimization",
+        "design",
+        "benchmarking",
+        "affinity prediction"
+      ],
+      "binder": "VHH",
+      "target": [
+        "SEP",
+        "SAbDab-nano",
+        "minibinder"
+      ],
+      "product": "licensable",
+      "product_display_name": "Licensable",
+      "product_kind": "licensable",
+      "source": "Expected Q3–Q4",
+      "a_size": 1301,
+      "alpha_size": 1815,
+      "total_ppi_count": 2370672,
+      "unique_ppi_count": 1603935,
+      "density": 0.6793,
+      "tags": [
+        "design",
+        "minibinder",
+        "pseudo structure",
+        "SAbDab-nano",
+        "SEP",
+        "SSM"
+      ],
+      "has_tutorial": false
+    },
+    {
+      "id": "ab1765",
+      "name": "Synthetic Epitope Proteins (SEPs) — de novo minibinder pseudo-structures with VHH single-mutant landscape",
+      "experiment": "2,234 synthetic epitope proteins designed via RFDiffusion + ProteinMPNN + Boltz-2, targeting 17 parent VHHs plus single point mutants of each. Includes ~2.34M AlphaSeq-validated PPIs and predicted VHH-SEP complex structures with comprehensive confidence metrics (pTM, iPTM, pLDDT, ipSAE, pDockQ).",
+      "details": "- VHHs sampled: 17 parent VHHs plus single point mutants (1,043 unique VHH sequences; 28-108 per parent, median 54)\n- SEPs sampled: 2,234 synthetic epitope proteins\n- Scale: ~2.34M non-control interactions (2,127 parental on-target + 140,110 mutant on-target + ~2.18M off-target)\n- Hits (`alphaseq_affinity < 3`): 1,293 (34 parental + 1,259 mutant)\n- Includes: predicted VHH-SEP complex structures for parental on-target PPIs (best model by ipSAE)\n- Suitable for: structure prediction, design filtering, de novo antibody design, VHH single-mutant affinity modeling\n",
+      "modes": [
+        {
+          "name": "source",
+          "file_type": "csv.gz"
+        },
+        {
+          "name": "ml",
+          "file_type": "csv.gz"
+        }
+      ],
+      "release_date": "2026-12-31",
+      "version": "1",
+      "status": "coming_soon",
+      "locked": true,
+      "coming_soon": true,
+      "url": "https://atlas.aalphabio.com/dataset/ab1765",
+      "structure_count": 2126,
+      "tasks": [
+        "optimization",
+        "design",
+        "benchmarking",
+        "affinity prediction"
+      ],
+      "binder": "VHH",
+      "target": [
+        "SEP",
+        "SAbDab-nano",
+        "minibinder"
+      ],
+      "product": "licensable",
+      "product_display_name": "Licensable",
+      "product_kind": "licensable",
+      "source": "Expected Q3–Q4",
+      "a_size": 1043,
+      "alpha_size": 2231,
+      "total_ppi_count": 2336764,
+      "unique_ppi_count": 1701976,
+      "density": 0.7314,
+      "tags": [
+        "design",
+        "minibinder",
+        "pseudo structure",
+        "SAbDab-nano",
+        "SEP",
+        "SSM"
+      ],
+      "has_tutorial": false
+    },
+    {
+      "id": "ab1766",
+      "name": "Synthetic Epitope Proteins (SEPs) — de novo minibinder pseudo-structures with VHH single-mutant landscape",
+      "experiment": "2,369 synthetic epitope proteins designed via RFDiffusion + ProteinMPNN + Boltz-2, targeting 15 parent VHHs plus single point mutants of each. Includes ~2.35M AlphaSeq-validated PPIs and predicted VHH-SEP complex structures with comprehensive confidence metrics (pTM, iPTM, pLDDT, ipSAE, pDockQ).",
+      "details": "- VHHs sampled: 15 parent VHHs plus single point mutants (989 unique VHH sequences; 41-100 per parent, median 63)\n- SEPs sampled: 2,369 synthetic epitope proteins\n- Scale: ~2.35M non-control interactions (2,333 parental on-target + 155,726 mutant on-target + ~2.18M off-target)\n- Hits (`alphaseq_affinity < 3`): 4,836 (89 parental + 4,747 mutant)\n- Includes: predicted VHH-SEP complex structures for parental on-target PPIs (best model by ipSAE)\n- Suitable for: structure prediction, design filtering, de novo antibody design, VHH single-mutant affinity modeling\n",
+      "modes": [
+        {
+          "name": "source",
+          "file_type": "csv.gz"
+        },
+        {
+          "name": "ml",
+          "file_type": "csv.gz"
+        }
+      ],
+      "release_date": "2026-12-31",
+      "version": "1",
+      "status": "coming_soon",
+      "locked": true,
+      "coming_soon": true,
+      "url": "https://atlas.aalphabio.com/dataset/ab1766",
+      "structure_count": 2331,
+      "tasks": [
+        "optimization",
+        "design",
+        "benchmarking",
+        "affinity prediction"
+      ],
+      "binder": "VHH",
+      "target": [
+        "SEP",
+        "SAbDab-nano",
+        "minibinder"
+      ],
+      "product": "licensable",
+      "product_display_name": "Licensable",
+      "product_kind": "licensable",
+      "source": "Expected Q3–Q4",
+      "a_size": 989,
+      "alpha_size": 2366,
+      "total_ppi_count": 2350048,
+      "unique_ppi_count": 1618258,
+      "density": 0.6916,
+      "tags": [
+        "design",
+        "minibinder",
+        "pseudo structure",
+        "SAbDab-nano",
+        "SEP",
+        "SSM"
+      ],
+      "has_tutorial": false
+    },
+    {
+      "id": "ab1767",
+      "name": "Synthetic Epitope Proteins (SEPs) — de novo minibinder pseudo-structures with VHH single-mutant landscape",
+      "experiment": "2,031 synthetic epitope proteins designed via RFDiffusion + ProteinMPNN + Boltz-2, targeting 21 parent VHHs plus single point mutants of each. Includes ~2.75M AlphaSeq-validated PPIs and predicted VHH-SEP complex structures with comprehensive confidence metrics (pTM, iPTM, pLDDT, ipSAE, pDockQ).",
+      "details": "- VHHs sampled: 21 parent VHHs plus single point mutants (1,352 unique VHH sequences; 40-97 per parent, median 62)\n- SEPs sampled: 2,031 synthetic epitope proteins\n- Scale: ~2.75M non-control interactions (1,935 parental on-target + 122,847 mutant on-target + ~2.62M off-target)\n- Hits (`alphaseq_affinity < 3`): 5,046 (107 parental + 4,939 mutant)\n- Includes: predicted VHH-SEP complex structures for parental on-target PPIs (best model by ipSAE)\n- Suitable for: structure prediction, design filtering, de novo antibody design, VHH single-mutant affinity modeling\n",
+      "modes": [
+        {
+          "name": "source",
+          "file_type": "csv.gz"
+        },
+        {
+          "name": "ml",
+          "file_type": "csv.gz"
+        }
+      ],
+      "release_date": "2026-12-31",
+      "version": "1",
+      "status": "coming_soon",
+      "locked": true,
+      "coming_soon": true,
+      "url": "https://atlas.aalphabio.com/dataset/ab1767",
+      "structure_count": 1935,
+      "tasks": [
+        "optimization",
+        "design",
+        "benchmarking",
+        "affinity prediction"
+      ],
+      "binder": "VHH",
+      "target": [
+        "SEP",
+        "SAbDab-nano",
+        "minibinder"
+      ],
+      "product": "licensable",
+      "product_display_name": "Licensable",
+      "product_kind": "licensable",
+      "source": "Expected Q3–Q4",
+      "a_size": 1352,
+      "alpha_size": 2028,
+      "total_ppi_count": 2752005,
+      "unique_ppi_count": 1701202,
+      "density": 0.6205,
+      "tags": [
+        "design",
+        "minibinder",
+        "pseudo structure",
+        "SAbDab-nano",
+        "SEP",
+        "SSM"
+      ],
+      "has_tutorial": false
+    },
+    {
+      "id": "ab1768",
+      "name": "Synthetic Epitope Proteins (SEPs) — de novo minibinder pseudo-structures with VHH single-mutant landscape",
+      "experiment": "2,592 synthetic epitope proteins designed via RFDiffusion + ProteinMPNN + Boltz-2, targeting 13 parent VHHs plus single point mutants of each. Includes ~2.41M AlphaSeq-validated PPIs and predicted VHH-SEP complex structures with comprehensive confidence metrics (pTM, iPTM, pLDDT, ipSAE, pDockQ).",
+      "details": "- VHHs sampled: 13 parent VHHs plus single point mutants (928 unique VHH sequences; 45-93 per parent, median 70)\n- SEPs sampled: 2,592 synthetic epitope proteins\n- Scale: ~2.41M non-control interactions (2,509 parental on-target + 174,529 mutant on-target + ~2.23M off-target)\n- Hits (`alphaseq_affinity < 3`): 17,790 (322 parental + 17,468 mutant)\n- Includes: predicted VHH-SEP complex structures for parental on-target PPIs (best model by ipSAE)\n- Suitable for: structure prediction, design filtering, de novo antibody design, VHH single-mutant affinity modeling\n",
+      "modes": [
+        {
+          "name": "source",
+          "file_type": "csv.gz"
+        },
+        {
+          "name": "ml",
+          "file_type": "csv.gz"
+        }
+      ],
+      "release_date": "2026-12-31",
+      "version": "1",
+      "status": "coming_soon",
+      "locked": true,
+      "coming_soon": true,
+      "url": "https://atlas.aalphabio.com/dataset/ab1768",
+      "structure_count": 2509,
+      "tasks": [
+        "optimization",
+        "design",
+        "benchmarking",
+        "affinity prediction"
+      ],
+      "binder": "VHH",
+      "target": [
+        "SEP",
+        "SAbDab-nano",
+        "minibinder"
+      ],
+      "product": "licensable",
+      "product_display_name": "Licensable",
+      "product_kind": "licensable",
+      "source": "Expected Q3–Q4",
+      "a_size": 928,
+      "alpha_size": 2589,
+      "total_ppi_count": 2413152,
+      "unique_ppi_count": 1312519,
+      "density": 0.5463,
+      "tags": [
+        "design",
+        "minibinder",
+        "pseudo structure",
+        "SAbDab-nano",
+        "SEP",
+        "SSM"
+      ],
+      "has_tutorial": false
+    },
+    {
+      "id": "ab1860",
+      "name": "Block 1860",
+      "experiment": "Synthetic epitope proteins (SEPs) designed in silico to bind a panel of parental VHHs.",
+      "details": "- VHHs sampled: 25 parent VHHs\n- SEPs sampled: 39,496 synthetic epitope proteins\n- Scale: ~1.1M total interactions (~1.0M off-target, 39,496 on-target)\n- Includes: predicted VHH-SEP complex structures for the parental on-target interactions (best model by ipSAE)\n- Suitable for: structure prediction, design filtering, de novo antibody design, and VHH single-mutant affinity modeling",
+      "modes": [
+        {
+          "name": "source",
+          "file_type": "csv.gz"
+        },
+        {
+          "name": "ml",
+          "file_type": "csv.gz"
+        }
+      ],
+      "release_date": "2026-12-31",
+      "version": "1",
+      "status": "coming_soon",
+      "locked": true,
+      "coming_soon": true,
+      "url": "https://atlas.aalphabio.com/dataset/ab1860",
+      "structure_count": 39472,
+      "tasks": [
+        "benchmarking",
+        "design",
+        "optimization"
+      ],
+      "binder": "VHH",
+      "target": [
+        "minibinder",
+        "SEP"
+      ],
+      "product": "licensable",
+      "product_display_name": "Licensable",
+      "product_kind": "licensable",
+      "source": "Expected Q3–Q4",
+      "a_size": 39523,
+      "alpha_size": 28,
+      "total_ppi_count": 1106644,
+      "unique_ppi_count": 1106644,
+      "density": 1.0,
+      "tags": [
+        "design",
+        "pseudo structure",
+        "SEP",
+        "minibinder",
+        "optimization"
+      ],
+      "has_tutorial": false
+    }
+  ]
+}

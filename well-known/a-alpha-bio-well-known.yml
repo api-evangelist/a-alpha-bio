@@ -1,0 +1,75 @@
+generated: '2026-08-06'
+method: probed
+source: live HTTP probes
+result: none
+detail: >-
+  No /.well-known/ document of any kind is published on any A-Alpha Bio host. Recorded as negative evidence — no
+  `WellKnown` or `SecurityTxt` pointer is wired into apis.yml, because there is nothing to point at.
+soft_404_warning: >-
+  atlas.aalphabio.com is a single-page app served behind a catch-all that answers HTTP 200 with an 874-byte HTML shell
+  for EVERY path, including a deliberately nonsensical control path. Every 200 recorded below for that host is a soft
+  404: the response body is byte-identical (md5 6a2608609ed5e63011eec066a3a278be) to the control. None of them is a
+  real well-known document.
+control_probe:
+  url: https://atlas.aalphabio.com/zzz-control-path-does-not-exist-9911
+  http_status: 200
+  content_type: text/html
+  bytes: 874
+  md5: 6a2608609ed5e63011eec066a3a278be
+probes:
+- host: api.atlas.aalphabio.com
+  results:
+  - {path: /.well-known/security.txt, status: 404, found: false}
+  - {path: /.well-known/openid-configuration, status: 404, found: false}
+  - {path: /.well-known/oauth-authorization-server, status: 404, found: false}
+  - {path: /.well-known/oauth-protected-resource, status: 404, found: false}
+  - {path: /.well-known/api-catalog, status: 404, found: false}
+  - {path: /.well-known/ai-plugin.json, status: 404, found: false}
+  - {path: /.well-known/agent-card.json, status: 404, found: false}
+  - {path: /.well-known/agent.json, status: 404, found: false}
+  - {path: /llms.txt, status: 404, found: false}
+- host: atlas.aalphabio.com
+  note: every path below returned the byte-identical SPA shell — soft 404, not a hit
+  results:
+  - {path: /.well-known/security.txt, status: 200, found: false, soft_404: true}
+  - {path: /.well-known/openid-configuration, status: 200, found: false, soft_404: true}
+  - {path: /.well-known/oauth-authorization-server, status: 200, found: false, soft_404: true}
+  - {path: /.well-known/oauth-protected-resource, status: 200, found: false, soft_404: true}
+  - {path: /.well-known/api-catalog, status: 200, found: false, soft_404: true}
+  - {path: /.well-known/ai-plugin.json, status: 200, found: false, soft_404: true}
+  - {path: /.well-known/agent-card.json, status: 200, found: false, soft_404: true}
+  - {path: /.well-known/agent.json, status: 200, found: false, soft_404: true}
+  - {path: /llms.txt, status: 200, found: false, soft_404: true}
+  - {path: /robots.txt, status: 200, found: false, soft_404: true}
+- host: www.aalphabio.com
+  results:
+  - {path: /.well-known/security.txt, status: 404, found: false}
+  - {path: /.well-known/openid-configuration, status: 404, found: false}
+  - {path: /.well-known/oauth-authorization-server, status: 404, found: false}
+  - {path: /.well-known/oauth-protected-resource, status: 404, found: false}
+  - {path: /.well-known/api-catalog, status: 404, found: false}
+  - {path: /.well-known/ai-plugin.json, status: 404, found: false}
+  - {path: /.well-known/agent-card.json, status: 404, found: false}
+  - {path: /.well-known/agent.json, status: 404, found: false}
+  - {path: /llms.txt, status: 404, found: false}
+  - {path: /robots.txt, status: 404, found: false}
+- host: aalphabio.com
+  results:
+  - {path: /.well-known/security.txt, status: 404, found: false}
+  - {path: /.well-known/agent-card.json, status: 404, found: false}
+  - {path: /.well-known/agent.json, status: 404, found: false}
+gaps:
+- id: security-txt
+  owner: provider
+  detail: >-
+    No RFC 9116 security.txt. A company holding US Department of Defense contracts and pharmaceutical partnerships has
+    no published channel for a researcher to report a vulnerability in the Atlas platform.
+- id: oauth-metadata
+  owner: provider
+  detail: >-
+    Atlas authenticates against AWS Cognito, but neither the API host nor the app host publishes
+    /.well-known/oauth-authorization-server or /.well-known/oauth-protected-resource, so no client can discover the
+    authorization server programmatically.
+- id: robots-txt
+  owner: provider
+  detail: www.aalphabio.com returns 404 for /robots.txt; atlas.aalphabio.com soft-404s it into the SPA shell.

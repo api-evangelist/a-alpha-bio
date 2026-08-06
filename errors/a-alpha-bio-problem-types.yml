@@ -1,0 +1,102 @@
+generated: '2026-08-06'
+method: derived
+source: openapi/a-alpha-bio-atlas-data-product-openapi-original.json
+docs: null
+format: vendor-json
+format_note: >-
+  NOT RFC 9457. The Atlas Data Product API is a FastAPI/uvicorn service and returns the framework-default error
+  envelope with `Content-Type: application/json`, not `application/problem+json`. There is no `type`, `title`,
+  `status`, `detail` (as a URI-typed problem) or `instance` member — only a single `detail` key. On 422 the `detail`
+  key holds an ARRAY of Pydantic validation errors rather than a string, so a client cannot treat `detail` as a
+  string without checking its type first.
+envelope:
+  media_type: application/json
+  shape_4xx_5xx: '{"detail": <string>}'
+  shape_422: '{"detail": [{"type": <string>, "loc": [<string|int>...], "msg": <string>, "input": <any>}]}'
+  schema: '#/components/schemas/HTTPValidationError (422 only; other statuses are undocumented in the spec)'
+  request_id: none observed
+problem_types:
+- status: 400
+  title: Bad request
+  detail_example: null
+  meaning: Missing path ID, or an invalid `mode` value on the data / schema operations.
+  operations:
+  - getDataset
+  - getDatasetDatacard
+  - getDatasetData
+  - getDatasetSchema
+  - listDatasetStructures
+  - downloadDatasetStructures
+  - getDatasetStructure
+  - getDatasetFigure
+  remediation: Supply a dataset `id`, and use a `mode` name that appears in the dataset's `modes[]` (e.g. `source`, `ml`).
+  source: openapi
+- status: 401
+  title: Unauthorized - authentication required
+  detail_example: '{"detail":"Missing token"}'
+  meaning: >-
+    No bearer token on an entitlement-gated operation. Only the data, schema and structure operations enforce this;
+    dataset discovery, metadata and Data Cards answer anonymously.
+  operations:
+  - getDatasetData
+  - getDatasetSchema
+  - listDatasetStructures
+  - downloadDatasetStructures
+  - getDatasetStructure
+  - getDatasetFigure
+  remediation: 'Sign in to Atlas and send `Authorization: Bearer <Cognito access token>`.'
+  source: openapi + live probe
+  verified:
+    url: https://api.atlas.aalphabio.com/api/v1/datasets/ab1001/data
+    http_status: 401
+- status: 404
+  title: Not found
+  detail_example: '{"detail":"Dataset not found"}'
+  meaning: >-
+    Dataset, dataset version, data file, schema, structures archive, structure file or figure does not exist. Also
+    returned by unrouted paths on the API host as `{"detail":"Not Found"}` (note the differing capitalisation between
+    the framework default and the handler-supplied message).
+  operations:
+  - getDataset
+  - getDatasetDatacard
+  - getDatasetData
+  - getDatasetSchema
+  - listDatasetStructures
+  - downloadDatasetStructures
+  - getDatasetStructure
+  - getDatasetFigure
+  remediation: List datasets first and use an `id` from `objects[].id`; confirm the `version` exists.
+  source: openapi + live probe
+  verified:
+    url: https://api.atlas.aalphabio.com/api/v1/datasets/zzz999
+    http_status: 404
+- status: 422
+  title: Validation Error
+  detail_example: >-
+    {"detail":[{"type":"bool_parsing","loc":["query","all_versions"],"msg":"Input should be a valid boolean, unable to
+    interpret input","input":"notabool"}]}
+  meaning: Query or path parameter failed Pydantic coercion/validation.
+  operations:
+  - listDatasets
+  - getDataset
+  - getDatasetDatacard
+  - getDatasetData
+  - getDatasetSchema
+  - listDatasetStructures
+  - downloadDatasetStructures
+  - getDatasetStructure
+  - getDatasetFigure
+  remediation: >-
+    Read `detail[].loc` for the offending parameter and `detail[].type` for the coercion that failed. Booleans must be
+    literal `true`/`false`; `max_rows` must be a non-negative integer.
+  source: openapi + live probe
+  verified:
+    url: https://api.atlas.aalphabio.com/api/v1/datasets?all_versions=notabool
+    http_status: 422
+gaps:
+- No 5xx responses are documented anywhere in the specification.
+- No `429` / rate-limit response is documented, and no rate-limit headers were observed on a 200.
+- No machine-readable error `code` or `type` URI — clients must switch on HTTP status plus free-text `detail`.
+- >-
+  `detail` is polymorphic (string on 400/401/404, array on 422); a stricter contract would give 422 its own member or
+  adopt RFC 9457 `errors[]`.

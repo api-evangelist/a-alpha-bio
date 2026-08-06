@@ -1,0 +1,338 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/a-alpha-bio/refs/heads/main/json-schema/a-alpha-bio-datacard.json",
+  "title": "DatacardResponse",
+  "description": "Response from GET /datasets/{id}/datacard endpoint.\n\nSame shape as CardContent — one sub-object per detail-page tab (`exec`,\n`ml`, `bio`) — except `ml` is the served variant, enriched with the\nS3-derived `schema_columns` (see `MlCardContentResponse`).",
+  "x-generated": "2026-08-06",
+  "x-method": "derived",
+  "x-source": "openapi/a-alpha-bio-atlas-data-product-openapi-original.json#/components/schemas/DatacardResponse",
+  "properties": {
+    "exec": {
+      "$ref": "#/$defs/ExecCardContent"
+    },
+    "ml": {
+      "$ref": "#/$defs/MlCardContentResponse"
+    },
+    "bio": {
+      "$ref": "#/$defs/BioCardContent"
+    }
+  },
+  "type": "object",
+  "$defs": {
+    "BioCardContent": {
+      "properties": {
+        "biological_system": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Biological System"
+        },
+        "figures": {
+          "items": {
+            "$ref": "#/$defs/CardContentFigure"
+          },
+          "type": "array",
+          "title": "Figures"
+        },
+        "findings": {
+          "items": {
+            "$ref": "#/$defs/CardContentTitleBody"
+          },
+          "type": "array",
+          "title": "Findings"
+        },
+        "considerations": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "title": "Considerations"
+        }
+      },
+      "type": "object",
+      "title": "BioCardContent",
+      "description": "Fields rendered on the dataset's Biology & Assay tab."
+    },
+    "CardContentDataView": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name"
+        },
+        "description": {
+          "type": "string",
+          "title": "Description"
+        },
+        "mode": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Mode"
+        }
+      },
+      "type": "object",
+      "required": [
+        "name",
+        "description"
+      ],
+      "title": "CardContentDataView",
+      "description": "One item in the 'Data views' section.\n\n``mode`` is the view's data-pair handle token (e.g. ``source``, ``ml``): the\nadmin editor stores each view's S3 pair as ``data.<mode>.csv.gz`` /\n``data.<mode>.schema.json`` and the public API serves it under that mode. The\nportal detail page itself ignores it."
+    },
+    "CardContentFigure": {
+      "properties": {
+        "title": {
+          "type": "string",
+          "title": "Title"
+        },
+        "filenames": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "title": "Filenames",
+          "description": "Image filenames rendered as equal-width columns (e.g. ['affinity.svg'])"
+        },
+        "caption": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Caption"
+        }
+      },
+      "type": "object",
+      "required": [
+        "title"
+      ],
+      "title": "CardContentFigure",
+      "description": "One figure in the 'Data analysis' section.\n\n\"One figure\" = one title + one caption, but may include multiple\nside-by-side images via `filenames` — one image = full-width, N images\n= N equal columns."
+    },
+    "CardContentNoiseSignal": {
+      "properties": {
+        "label": {
+          "type": "string",
+          "title": "Label"
+        },
+        "value": {
+          "type": "string",
+          "title": "Value"
+        },
+        "sub": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Sub"
+        }
+      },
+      "type": "object",
+      "required": [
+        "label",
+        "value"
+      ],
+      "title": "CardContentNoiseSignal",
+      "description": "One stat card in the 'Noise & signal' section."
+    },
+    "CardContentSchemaColumn": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name"
+        },
+        "type": {
+          "type": "string",
+          "title": "Type"
+        },
+        "description": {
+          "type": "string",
+          "title": "Description"
+        }
+      },
+      "type": "object",
+      "required": [
+        "name",
+        "type",
+        "description"
+      ],
+      "title": "CardContentSchemaColumn",
+      "description": "One row of the 'Schema (key columns)' table."
+    },
+    "CardContentStatSubs": {
+      "properties": {
+        "a_size": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "A Size"
+        },
+        "alpha_size": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Alpha Size"
+        },
+        "ppi": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Ppi"
+        }
+      },
+      "type": "object",
+      "title": "CardContentStatSubs",
+      "description": "Per-stat subtitle text shown beneath the stats row."
+    },
+    "CardContentTitleBody": {
+      "properties": {
+        "title": {
+          "type": "string",
+          "title": "Title"
+        },
+        "body": {
+          "type": "string",
+          "title": "Body"
+        }
+      },
+      "type": "object",
+      "required": [
+        "title",
+        "body"
+      ],
+      "title": "CardContentTitleBody",
+      "description": "A {title, body} item — used for differentiation and key findings."
+    },
+    "CardContentUseCase": {
+      "properties": {
+        "title": {
+          "type": "string",
+          "title": "Title"
+        },
+        "description": {
+          "type": "string",
+          "title": "Description"
+        }
+      },
+      "type": "object",
+      "required": [
+        "title",
+        "description"
+      ],
+      "title": "CardContentUseCase",
+      "description": "One row of the 'Use cases unlocked' section."
+    },
+    "ExecCardContent": {
+      "properties": {
+        "scientific_value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Scientific Value"
+        },
+        "use_cases": {
+          "items": {
+            "$ref": "#/$defs/CardContentUseCase"
+          },
+          "type": "array",
+          "title": "Use Cases"
+        },
+        "differentiations": {
+          "items": {
+            "$ref": "#/$defs/CardContentTitleBody"
+          },
+          "type": "array",
+          "title": "Differentiations"
+        },
+        "stat_subs": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CardContentStatSubs"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "type": "object",
+      "title": "ExecCardContent",
+      "description": "Fields rendered on the dataset's Executive Summary tab."
+    },
+    "MlCardContentResponse": {
+      "properties": {
+        "noise_signals": {
+          "items": {
+            "$ref": "#/$defs/CardContentNoiseSignal"
+          },
+          "type": "array",
+          "title": "Noise Signals"
+        },
+        "recommended_splits": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Recommended Splits"
+        },
+        "data_views": {
+          "items": {
+            "$ref": "#/$defs/CardContentDataView"
+          },
+          "type": "array",
+          "title": "Data Views"
+        },
+        "schema_columns": {
+          "items": {
+            "$ref": "#/$defs/CardContentSchemaColumn"
+          },
+          "type": "array",
+          "title": "Schema Columns"
+        }
+      },
+      "type": "object",
+      "title": "MlCardContentResponse",
+      "description": "``MlCardContent`` as served by the API, plus the derived column schema.\n\n``schema_columns`` is sourced from the version's ``data.source.schema.json``\non S3 at request time (see ``datasets_api._read_schema_columns``) so it stays\nin sync with the actual CSV. It lives only here, on the response model — the\nstored ``MlCardContent`` cannot hold it, so a stale copy can never be\npersisted and there is nothing to strip on save."
+    }
+  }
+}

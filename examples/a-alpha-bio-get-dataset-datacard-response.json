@@ -1,0 +1,204 @@
+{
+  "exec": {
+    "scientific_value": "A comprehensive **local affinity landscape** of a publicly available VHH-antigen crystal. Co-mutagenesis of both paratope and epitope in a single experiment reveals positional sensitivity on both sides of the interface.",
+    "use_cases": [
+      {
+        "title": "Affinity regression",
+        "description": "Train regressors to predict binding affinity from sequence pairs, leveraging labeled PPIs spanning both paratope and epitope variation"
+      },
+      {
+        "title": "Affinity optimization",
+        "description": "Use local landscape data to train oracles for affinity-maturation workflows: identify mutations that strengthen or weaken binding relative to the parent VHH72 x WT antigen pair"
+      },
+      {
+        "title": "Epitope sensitivity mapping",
+        "description": "Identify which antigen positions are most sensitive to mutation when engaged by VHH72, informing escape-mutation analysis and epitope engineering. Can be cross-referenced against crystal structure PDB: 6WAQ"
+      }
+    ],
+    "differentiations": [
+      {
+        "title": "Co-mutagenesis of both binding partners",
+        "body": "Most public datasets mutate only one side of the interface. This block mutates **both** the VHH paratope and the antigen epitope, enabling study of epistatic effects across the interface."
+      },
+      {
+        "title": "Dense positional coverage",
+        "body": ">30 VHH-paratope positions and >100 antigen epitope positions are sampled with near-complete amino-acid coverage, providing a dense local fitness landscape for benchmarking mutational effects."
+      },
+      {
+        "title": "Comparison to Block 673",
+        "body": "Same VHH72 x CoV-1 RBD system as Block 673, but at single-mutation resolution. Together the two blocks span local-to-combinatorial mutational space for the same antibody-antigen pair."
+      }
+    ],
+    "stat_subs": {
+      "a_size": ">600 mutations across >30 positions on the VHH",
+      "alpha_size": ">2,000 mutations across >100 positions on the antigen",
+      "ppi": "AlphaSeq affinity (log10 nM Kd)"
+    }
+  },
+  "ml": {
+    "noise_signals": [
+      {
+        "label": "Parent x WT affinity",
+        "value": "Kd ~1.5 log10 nM Kd",
+        "sub": "Median replicate affinity for VHH72 x WT CoV-1 RBD (50% replicates between [1.4, 1.6] log10 nM Kd)"
+      },
+      {
+        "label": "Stronger-than-parent PPIs",
+        "value": "~15%",
+        "sub": "of interactions bind more strongly than the parent median"
+      }
+    ],
+    "recommended_splits": "Split by **paratope position** (`pos_a`) or **epitope position** (`pos_alpha`) to test generalization to unseen regions of the interface.\n\nAlternatively, split by the sign of **delta_affinity** to create binder/non-binder classification tasks. Use the **ML view** (median affinity per unique sequence pair, controls removed). You may need to omit negative control `hTfr1_6Y76` from the ML set.",
+    "data_views": [
+      {
+        "name": "Source view",
+        "description": "All replicate-level PPIs including controls (ANeg, AlphaNeg) and a negative-control antigen (hTfr1_6Y76).",
+        "mode": "source"
+      },
+      {
+        "name": "ML view",
+        "description": "Median affinity per unique (mata_sequence, matalpha_sequence) pair. ANeg/AlphaNeg controls removed. Ready for modeling sequence pairs.",
+        "mode": "ml"
+      }
+    ],
+    "schema_columns": [
+      {
+        "name": "mata_description",
+        "type": "string",
+        "description": "Description of the A-library proteins"
+      },
+      {
+        "name": "matalpha_description",
+        "type": "string",
+        "description": "Description of the Library Alpha proteins"
+      },
+      {
+        "name": "mata_sequence",
+        "type": "string",
+        "description": "VHH amino acid sequence"
+      },
+      {
+        "name": "matalpha_sequence",
+        "type": "string",
+        "description": "Antigen amino acid sequence"
+      },
+      {
+        "name": "alphaseq_affinity",
+        "type": "float64",
+        "description": "Alphaseq Log10 Kd — primary label (lower = stronger binding)"
+      },
+      {
+        "name": "affinity_lower_bound",
+        "type": "float64",
+        "description": "the lower (weaker) error bar bounds for alphaseq_affinity, defined as the 95% confidence interval using the Wilson score interval."
+      },
+      {
+        "name": "affinity_upper_bound",
+        "type": "float64",
+        "description": "the upper (stronger) error bar bounds for alphaseq_affinity, defined as the 95% confidence interval using the Wilson score interval. Upper bounds (strongest possible affinity) are given for all interactions, even if a point estimate under alphaseq_affinity is not given."
+      },
+      {
+        "name": "normalized_affinity",
+        "type": "float64",
+        "description": "Z-score comparing the interaction affinity to the distribution of all other interactions involving either the MATa protein or the MATalpha protein, computed using successive normalization over the affinity matrix (see Olshen & Rajaratnam, 2010). A more negative value signifies a more specific interaction, such that a value of –2 is analogous to a value 2 standard deviations from the norm. Note that a strong negative normalized_affinity is not expected in cases where many MATa proteins bind the same MATalpha or vice versa (e.g., in an assay measuring affinities of a library of antibody variants to a target)."
+      },
+      {
+        "name": "above_background",
+        "type": "bool",
+        "description": "Boolean flag to indicate whether a PPI is considered above background binding of the distribution"
+      },
+      {
+        "name": "sufficient_replicate_observations",
+        "type": "bool",
+        "description": "Boolean flag to indicate whether we see enough diploid counts across replicates"
+      },
+      {
+        "name": "is_control",
+        "type": "bool",
+        "description": "Boolean flag indicating if the PPI contains a control sequence on the `A` or `Alpha` side (`ANeg` or `AlphaNeg`). Should be filtered out for any modeling or data analysis"
+      },
+      {
+        "name": "is_wt_a",
+        "type": "bool",
+        "description": "True if parent VHH72 sequence"
+      },
+      {
+        "name": "mutation_a",
+        "type": "string",
+        "description": "Mutation on VHH:"
+      },
+      {
+        "name": "pos_a",
+        "type": "Int64",
+        "description": "Position of mutation on VHH; None if parent, 1-indexed from sequence in `mata_sequence`"
+      },
+      {
+        "name": "is_wt_alpha",
+        "type": "bool",
+        "description": "True if wild-type antigen sequence"
+      },
+      {
+        "name": "mutation_alpha",
+        "type": "string",
+        "description": "Mutation on antigen:"
+      },
+      {
+        "name": "pos_alpha",
+        "type": "Int64",
+        "description": "Position of mutation on antigen; None if WT, 1-indexed from sequence in `matalpha_sequence`"
+      },
+      {
+        "name": "delta_affinity",
+        "type": "float64",
+        "description": "Difference in affinity of PPI against (parent x WT) median (negative = stronger)"
+      }
+    ]
+  },
+  "bio": {
+    "biological_system": "**[VHH72](https://doi.org/10.1016/j.cell.2020.04.031)** is a camelid single-domain antibody originally isolated against SARS-CoV-1 RBD. The co-crystal structure is available as **PDB: 6WAQ**.\n\nIn this block, the **paratope** (A-library) was mutagenized with >600 single-amino-acid substitutions across >30 positions. The **epitope** (Library Alpha) was independently mutagenized with >2,000 substitutions across >100 positions on the SARS-CoV-1 RBD.\n\nEvery VHH variant is measured against every antigen variant in a single AlphaSeq run, producing >1M PPIs. An antigen control (`hTfr1_6Y76`, human transferrin receptor) confirms VHH specificity, as VHHs are not intended to engage this target.",
+    "figures": [
+      {
+        "title": "Global affinity distribution",
+        "filenames": [
+          "affinity.svg"
+        ],
+        "caption": "**Left:** Global affinity distribution across all VHH x antigen interactions. Dashed line = parent VHH72 x WT antigen median. **Right:** Cumulative distribution showing ~15% of interactions bind more strongly than parent, and ~50% remain relatively strong binders (AlphaSeq log10 nM Kd < 2)."
+      },
+      {
+        "title": "Replicate consistency and negative control",
+        "filenames": [
+          "replicates.svg",
+          "controls.svg"
+        ],
+        "caption": "**Left:** Replicate affinity measurements for parent VHH72 x WT antigen — ~50% of replicates fall between log10 nM Kd 1.4–1.6. **Right:** All VHH variants against negative control hTfr1_6Y76 show log10 nM Kd > 3 (generally non-binding), confirming specificity."
+      },
+      {
+        "title": "Positional sensitivity — paratope and epitope",
+        "filenames": [
+          "paratope_epitope.svg"
+        ],
+        "caption": "Violin plots of delta affinity by position. **(Top)** VHH paratope: positions 33, 35, 99 are highly sensitive; some mutations at sensitive positions greatly enhance binding. **(Bottom)** Antigen epitope: a subset of RBD positions are identified as sensitive to the WT VHH."
+      }
+    ],
+    "findings": [
+      {
+        "title": "~15% of PPIs improve on parent x WT antigen interaction",
+        "body": "Approximately 15% of all measured interactions bind more strongly than the parent VHH72 x WT antigen median."
+      },
+      {
+        "title": "Paratope hot-spots identified",
+        "body": "Positions 33, 35, and 99 on VHH72 are highly sensitive to mutation. While most mutations at sensitive positions weaken binding, some significantly enhance it."
+      },
+      {
+        "title": "Epitope sensitivity mapped",
+        "body": "A subset of SARS-CoV-1 RBD positions are identified as sensitive to the WT VHH, enabling escape-mutation analysis."
+      }
+    ],
+    "considerations": [
+      "`delta_affinity` is computed relative to the **median** of parent x WT replicates; `delta_affinity > 0` = weaker, `< 0` = stronger",
+      "The negative control antigen `hTfr1_6Y76` can be filtered out if modeling only VHH72 x RBD interactions",
+      "Mutations are 1-indexed in `mutation_a` and `mutation_alpha` from `mata_sequence` and `matalpha_sequence` respectively",
+      "Positions defined as `pos_a` and `pos_alpha`"
+    ]
+  }
+}

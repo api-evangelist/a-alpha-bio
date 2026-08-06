@@ -1,0 +1,21 @@
+{
+  "repo": "a-alpha-bio",
+  "feeds": [
+    {
+      "source": "https://atlas.aalphabio.com/",
+      "feed_url": "https://atlas.aalphabio.com/",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    },
+    {
+      "source": "https://aalphabio.substack.com/",
+      "feed_url": "https://aalphabio.substack.com/feed",
+      "title": "",
+      "saved": 1,
+      "method": "discovered"
+    }
+  ],
+  "post_count": 1,
+  "fetched": "2026-08-06T14:08:46Z"
+}

@@ -1,0 +1,79 @@
+generated: '2026-08-06'
+method: derived
+source: openapi/a-alpha-bio-atlas-data-product-openapi-original.json
+docs: null
+api: Atlas Data Product API
+versioning:
+  scheme: uri-path
+  current: v1
+  spec_version: 0.0.43
+  published_policy: false
+  detail: >-
+    Version is carried in the path (`/api/v1/...`). The served OpenAPI reports `info.version: 0.0.43`, a pre-1.0 build
+    number. No published versioning policy, no version-support window, no statement of what constitutes a breaking
+    change.
+resource_versioning:
+  scheme: per-dataset version string
+  selector: '`version` query parameter on every dataset operation; defaults to latest'
+  list_behaviour: >-
+    `listDatasets` returns only the latest version of each dataset unless `all_versions=true` is passed.
+  detail: >-
+    Datasets are independently versioned and re-releasable. This is the versioning axis that actually matters for the
+    product — an unpinned `version` means a training run is not reproducible after a dataset re-release.
+workflow_status:
+  field: DatasetItem.status
+  values:
+  - draft
+  - pending_review
+  - published
+  - retracted
+  detail: >-
+    Datasets carry an editorial workflow status. `retracted` is the closest thing the platform has to a deprecation
+    signal for a data product, and non-`published` statuses are documented as only ever returned to admins previewing
+    with drafts included. There is no documented consumer notification path when a dataset is retracted.
+  source: openapi components.schemas.DatasetItem.status
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: not observed
+  deprecation_header: not observed
+  rfc8594: false
+  deprecated_operations: []
+  detail: >-
+    No RFC 8594 `Sunset` or `Deprecation` headers were returned on any probed response, no operation is marked
+    `deprecated: true` in the specification, and no deprecation policy page exists. Nothing to point a `Deprecation`
+    pointer at.
+sla:
+  published: false
+  url: null
+status_page:
+  present: false
+  url: null
+  probes:
+  - url: https://status.aalphabio.com
+    result: DNS does not resolve (curl exit 6 / status 000)
+  - url: https://status.atlas.aalphabio.com
+    result: DNS does not resolve (curl exit 6 / status 000)
+  detail: >-
+    No status page found. A `/health` endpoint exists on the API host and returned `{"status":"ok"}` (200), but a
+    liveness probe is not a status page — there is no incident history, no subscribe channel, no component breakdown.
+health_check:
+  url: https://api.atlas.aalphabio.com/health
+  http_status: 200
+  body: '{"status":"ok"}'
+  documented_in_spec: false
+  note: Undocumented — it does not appear in the OpenAPI `paths`, but it answers publicly.
+changelog:
+  published: false
+  url: null
+  detail: >-
+    No dated changelog for the API or for the Atlas platform. Product announcements are carried as press releases at
+    https://www.aalphabio.com/media/ and long-form posts at https://aalphabio.substack.com/, neither of which is an
+    API change log. The only version signal a consumer has is `info.version` moving in the served spec.
+maturity:
+  api_launched: '2026-07-07'
+  api_launched_source: https://www.aalphabio.com/media/a-alpha-bio-launches-atlas-to-address-the-data-bottleneck-in-ai-enabled-protein-design/
+  detail: >-
+    The Atlas platform was announced on 2026-07-07 and the Atlas Consortium on 2026-07-22. The API is roughly one
+    month old at the time of this profile, which is consistent with the 0.0.x spec version and the absence of
+    lifecycle governance artifacts.

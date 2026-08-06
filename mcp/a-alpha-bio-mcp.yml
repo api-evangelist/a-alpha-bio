@@ -1,0 +1,98 @@
+generated: '2026-08-06'
+method: derived
+source: openapi/a-alpha-bio-atlas-data-product-openapi-original.json
+status: candidate
+url: null
+run_by: none
+disclaimer: >-
+  A-Alpha Bio DOES NOT PUBLISH AN MCP SERVER. This file is an API-Evangelist-derived proposal, mapped one-to-one from
+  the nine operations of the Atlas Data Product API. Nothing here is an A-Alpha Bio product or endorsement, and no
+  endpoint below exists. It is recorded because the API is read-only, small, and describes ML training data — about
+  as MCP-shaped a surface as exists — so the adapter is one thin wrapper away.
+searched:
+  fetched: '2026-08-06'
+  probes:
+  - url: https://api.atlas.aalphabio.com/mcp
+    http_status: 404
+  - url: https://api.atlas.aalphabio.com/api/v1/mcp
+    http_status: 404
+  - url: https://api.atlas.aalphabio.com/api/mcp
+    http_status: 404
+  - url: https://api.atlas.aalphabio.com/sse
+    http_status: 404
+  - url: https://mcp.aalphabio.com/mcp
+    http_status: 0
+    note: DNS does not resolve
+  - url: https://api.atlas.aalphabio.com/.well-known/oauth-protected-resource
+    http_status: 404
+  method: 'POST {"jsonrpc":"2.0","id":1,"method":"tools/list"} with Accept: application/json, text/event-stream'
+  result: no MCP surface found on any A-Alpha Bio host
+transport_proposed: streamable-http
+auth_proposed: >-
+  Bearer passthrough of the caller's Atlas (AWS Cognito) access token. The three discovery tools below work with no
+  token at all, which makes an anonymous read-only server viable for catalogue browsing.
+tools:
+- name: list_datasets
+  description: >-
+    List Atlas Data Blocks. Set include_locked=true to see the public licensable catalogue (with defaults, an
+    unauthenticated caller gets an empty list).
+  rest: listDatasets
+  http: GET /api/v1/datasets
+  auth_required: false
+  inputSchema_source: openapi#/paths/~1api~1v1~1datasets/get/parameters
+- name: get_dataset
+  description: Get metadata for one Atlas Data Block, optionally at a pinned version.
+  rest: getDataset
+  http: GET /api/v1/datasets/{id}
+  auth_required: false
+  inputSchema_source: openapi#/paths/~1api~1v1~1datasets~1{id}/get/parameters
+- name: get_dataset_datacard
+  description: >-
+    Get the structured Data Card for a Data Block — executive summary, ML guidance (noise/signal, recommended splits,
+    data views, column schema) and biology/assay context.
+  rest: getDatasetDatacard
+  http: GET /api/v1/datasets/{id}/datacard
+  auth_required: false
+  inputSchema_source: openapi#/paths/~1api~1v1~1datasets~1{id}~1datacard/get/parameters
+- name: get_dataset_data
+  description: Get a pre-signed URL for a Data Block's CSV, optionally row-limited and mode-selected.
+  rest: getDatasetData
+  http: GET /api/v1/datasets/{id}/data
+  auth_required: true
+  inputSchema_source: openapi#/paths/~1api~1v1~1datasets~1{id}~1data/get/parameters
+  note: Use redirect=false so the tool returns a URL as JSON rather than following a 302.
+- name: get_dataset_schema
+  description: Get the CSV column schema for a Data Block, shaped to unpack into pd.read_csv(url, **schema).
+  rest: getDatasetSchema
+  http: GET /api/v1/datasets/{id}/schema
+  auth_required: true
+  inputSchema_source: openapi#/paths/~1api~1v1~1datasets~1{id}~1schema/get/parameters
+- name: list_dataset_structures
+  description: List the structure (.cif) files attached to a Data Block.
+  rest: listDatasetStructures
+  http: GET /api/v1/datasets/{id}/structures
+  auth_required: true
+  inputSchema_source: openapi#/paths/~1api~1v1~1datasets~1{id}~1structures/get/parameters
+- name: download_dataset_structures
+  description: Get a pre-signed URL for a zip archive of all of a Data Block's structure files.
+  rest: downloadDatasetStructures
+  http: GET /api/v1/datasets/{id}/structures/download
+  auth_required: true
+  inputSchema_source: openapi#/paths/~1api~1v1~1datasets~1{id}~1structures~1download/get/parameters
+- name: get_dataset_structure
+  description: Get the content of one structure file from a Data Block.
+  rest: getDatasetStructure
+  http: GET /api/v1/datasets/{id}/structures/{filename}
+  auth_required: true
+  inputSchema_source: openapi#/paths/~1api~1v1~1datasets~1{id}~1structures~1{filename}/get/parameters
+- name: get_dataset_figure
+  description: Get a figure image referenced by a Data Block's Data Card, scoped to a card tab.
+  rest: getDatasetFigure
+  http: GET /api/v1/datasets/{id}/figures/{tab}/{filename}
+  auth_required: true
+  inputSchema_source: openapi#/paths/~1api~1v1~1datasets~1{id}~1figures~1{tab}~1{filename}/get/parameters
+coverage:
+  openapi_operations: 9
+  tools_proposed: 9
+  mcp_only: 0
+  rest_only: 0

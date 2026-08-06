@@ -1,0 +1,42 @@
+generated: '2026-08-06'
+method: generated
+source: openapi/a-alpha-bio-atlas-data-product-openapi-original.json
+note: >-
+  A-Alpha Bio publishes no AGENTS.md and no skills of its own — searched the company site, the Atlas app and the
+  A-Alpha-Bio GitHub organization on 2026-08-06. These are API Evangelist skills, grounded entirely in operationIds
+  that exist verbatim in the harvested specification.
+api: openapi/a-alpha-bio-atlas-datasets-openapi.yml
+skills:
+- name: browse-atlas-catalog
+  file: skills/a-alpha-bio-browse-atlas-catalog.md
+  title: Browse the Atlas catalogue of protein-protein interaction Data Blocks
+  summary: >-
+    List the public Atlas Data Block catalogue and read a block's Data Card with no credentials, including the
+    non-obvious include_locked=true flag without which the catalogue reads as empty.
+  auth_required: false
+  operations:
+  - listDatasets
+  - getDataset
+  - getDatasetDatacard
+- name: load-data-block-into-pandas
+  file: skills/a-alpha-bio-load-data-block-into-pandas.md
+  title: Load a licensed Atlas Data Block into pandas
+  summary: >-
+    Pin a dataset version, pull the provider's pandas-ready column schema, resolve the pre-signed CSV URL and read it
+    into a DataFrame, then fetch the block's structure (.cif) files.
+  auth_required: true
+  operations:
+  - getDataset
+  - getDatasetSchema
+  - getDatasetData
+  - listDatasetStructures
+  - getDatasetStructure
+  - downloadDatasetStructures
+coverage:
+  openapi_operations: 9
+  operations_covered: 8
+  uncovered:
+  - operationId: getDatasetFigure
+    reason: >-
+      Serves Data Card figure images by tab and filename. Presentational — it has no place in a data-preparation or
+      catalogue-browsing flow, so it is deliberately not wrapped in a skill.

@@ -1,0 +1,132 @@
+generated: '2026-08-06'
+method: derived
+source: openapi/a-alpha-bio-atlas-data-product-openapi-original.json
+docs: null
+docs_note: >-
+  A-Alpha Bio publishes no developer documentation site for the Atlas Data Product API. Everything below is derived
+  from the machine-readable spec the API serves at /openapi.json plus live probes of the running service on
+  2026-08-06. There is no prose reference to cross-check it against.
+api: Atlas Data Product API
+base_url: https://api.atlas.aalphabio.com
+authentication:
+  style: HTTP bearer JWT (AWS Cognito access token)
+  header: 'Authorization: Bearer <token>'
+  anonymous_reads:
+  - listDatasets
+  - getDataset
+  - getDatasetDatacard
+  gated_reads:
+  - getDatasetData
+  - getDatasetSchema
+  - listDatasetStructures
+  - downloadDatasetStructures
+  - getDatasetStructure
+  - getDatasetFigure
+  see: authentication/a-alpha-bio-authentication.yml
+idempotency:
+  supported: false
+  reason: >-
+    The API is read-only — all nine operations are GET. There are no writes, so there is no idempotency key, no
+    replay window and no retention policy. GETs are naturally idempotent; no `Idempotency-Key` header is defined or
+    accepted.
+  header: null
+pagination:
+  supported: false
+  style: none
+  detail: >-
+    `GET /api/v1/datasets` returns the entire collection in a single `objects[]` array with no `limit`, `offset`,
+    `cursor`, `page` or `next` member and no `Link` header. The catalogue is small (16 records including locked and
+    coming-soon teasers when both flags are set, 2026-08-06), so the whole thing fits in one response today — but
+    there is no forward-compatible paging contract for when it grows.
+  response_field: objects
+  row_limiting:
+    operation: getDatasetData
+    parameter: max_rows
+    detail: >-
+      `max_rows` caps the number of DATA rows inside the CSV payload. It is a payload-size control on a file download,
+      not collection pagination — there is no companion offset or cursor.
+filtering:
+  supported: true
+  style: boolean toggle flags on listDatasets, not a query language
+  parameters:
+  - name: all_versions
+    default: false
+    meaning: Include every version of each dataset instead of only the latest.
+  - name: include_locked
+    default: false
+    meaning: >-
+      Include locked datasets — records whose metadata is public but whose data requires a purchase or subscription.
+      All 16 datasets visible anonymously on 2026-08-06 were `locked: true`.
+  - name: include_coming_soon
+    default: false
+    meaning: Include coming-soon teasers — upcoming releases with visible metadata but no data yet.
+  note: >-
+    With all flags at their defaults an anonymous caller gets an EMPTY array. Discovery of the public catalogue
+    requires `include_locked=true`, which is a non-obvious default for a data-licensing marketplace.
+field_expansion:
+  supported: false
+  detail: No `expand`, `fields` or sparse-fieldset parameter. Responses are fixed-shape.
+sorting:
+  supported: false
+  detail: No `sort`/`order_by` parameter. Observed ordering is ascending by dataset `id`.
+metadata:
+  supported: false
+  detail: No customer-writable `metadata` object (the API is read-only).
+request_tracing:
+  request_id_header: none
+  detail: >-
+    No `X-Request-Id`, `Request-Id`, `Traceparent` or equivalent was returned on any probed response. Response headers
+    on a 200 were limited to `date`, `content-type`, `content-length` and `server: uvicorn`. There is nothing for a
+    caller to quote in a support ticket.
+versioning:
+  api_version:
+    style: URI path segment
+    value: /api/v1
+    detail: All nine operations sit under `/api/v1`. No version header or media-type versioning.
+  spec_version:
+    value: 0.0.43
+    source: info.version in the served OpenAPI
+    detail: >-
+      A pre-1.0 build number, not a dated or semver-stable public contract. It moves independently of the `/v1` path
+      segment, so a client cannot pin behaviour to it.
+  resource_version:
+    style: per-dataset `version` string, selected with a `version` query parameter
+    default: latest
+    detail: >-
+      Every dataset carries its own `version` (observed values are plain integers as strings, e.g. "1"). Omitting the
+      parameter resolves to latest, which means an un-pinned call is not reproducible across a dataset re-release —
+      pin `version` explicitly for anything that feeds model training.
+  see: lifecycle/a-alpha-bio-lifecycle.yml
+error_envelope:
+  format: vendor-json
+  shape: '{"detail": <string>} — but 422 returns {"detail": [ {type, loc, msg, input} ]}'
+  rfc9457: false
+  see: errors/a-alpha-bio-problem-types.yml
+rate_limiting:
+  documented: false
+  headers_observed: none
+  detail: >-
+    No `RateLimit-*` (RFC 9331 draft), `X-RateLimit-*` or `Retry-After` headers were returned on any probed response,
+    and no 429 is documented in the spec. Rate-limiting posture is unknown to a caller.
+content_negotiation:
+  request: none — no request bodies anywhere in the API
+  response_media_types:
+  - application/json
+  binary_delivery:
+    style: pre-signed S3 URL
+    detail: >-
+      `getDatasetData` and `downloadDatasetStructures` do not stream bytes from the API host. They hand back a
+      pre-signed S3 URL — by default as a `302` redirect, or as `{"url": "..."}` JSON when `redirect=false` is set on
+      `getDatasetData`. Clients that follow redirects automatically will land on S3; clients that need the URL itself
+      should pass `redirect=false`.
+interoperability:
+  detail: >-
+    `getDatasetSchema` returns a column schema explicitly documented as unpackable straight into
+    `pd.read_csv(url, **schema)` — a deliberate pandas-shaped affordance for the ML/notebook audience this API is
+    aimed at.
+cross_links:
+  errors: errors/a-alpha-bio-problem-types.yml
+  lifecycle: lifecycle/a-alpha-bio-lifecycle.yml
+  authentication: authentication/a-alpha-bio-authentication.yml
+  conformance: conformance/a-alpha-bio-conformance.yml
+  data_model: data-model/a-alpha-bio-data-model.yml

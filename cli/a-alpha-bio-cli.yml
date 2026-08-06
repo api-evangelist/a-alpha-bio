@@ -1,0 +1,59 @@
+generated: '2026-08-06'
+method: searched
+source: https://atlas.aalphabio.com/assets/CliLogin-CHuvQGAA.js
+name: Atlas client
+status: exists-undocumented
+detail: >-
+  A first-party command-line client for Atlas exists, but A-Alpha Bio publishes no page describing it. Its existence
+  is evidenced by a dedicated, eagerly-registered route in the Atlas web application — `/cli-login` — which is the
+  only route in the SPA that is code-split ahead of the main app shell, and whose copy reads: "Copy the login code
+  below and paste it back into your terminal to finish signing in to the Atlas client."
+auth_flow:
+  style: browser-assisted device-style login
+  steps:
+  - The CLI opens https://atlas.aalphabio.com/cli-login in a browser.
+  - The page signs the user in against the same AWS Cognito hosted domain the web app uses.
+  - A short-lived "login code" is rendered with a copy button; the page states the code expires.
+  - The user pastes the code back into the terminal to complete sign-in.
+  notes:
+  - >-
+    The page sets and reads a probe cookie (`aab.atlas.cliprobe`) to detect browsers that block cookies, and shows a
+    consent gate before proceeding — cookie consent is a site-wide Atlas choice, not per-page.
+  - >-
+    Failure states rendered by the page: needs-consent, cookies-blocked, and a generic "Login failed".
+  see: authentication/a-alpha-bio-authentication.yml
+install:
+  methods: []
+  detail: >-
+    NOT FOUND. No install instructions, package name, or download were located. Searched: PyPI (`aab`,
+    `atlas-client`, `aalphabio-atlas`, `aab-atlas`, `atlas-cli`, `alphabio` — the only 200, `aab`, is an unrelated
+    Anki add-on builder by a third party), npm (`aalphabio`, `alphaseq`, `a-alpha-bio` — all 404), and the
+    A-Alpha-Bio GitHub organization, which holds exactly one public repository (`alphabind`, the AlphaBind model and
+    pre-print code) and no CLI.
+commands:
+  documented: []
+  detail: >-
+    No command surface is published. The API the CLI necessarily drives is the Atlas Data Product API — nine read
+    operations over datasets, Data Cards, CSV data, CSV schemas and structure files. See
+    openapi/a-alpha-bio-atlas-datasets-openapi.yml.
+gap:
+  summary: >-
+    The CLI is the intended path for the ML audience Atlas is aimed at — pull a Data Block, unpack its schema into
+    pandas, train — and it is completely undiscoverable to anyone who has not already signed in. A single public
+    install/quickstart page would convert a hidden tool into a developer on-ramp.
+  owner: provider
+x-evidence:
+  fetched: '2026-08-06'
+  probes:
+  - url: https://atlas.aalphabio.com/assets/index-C195pKoW.js
+    http_status: 200
+    note: 'route map: {"/cli-login": () => import("./CliLogin-CHuvQGAA.js")}'
+  - url: https://atlas.aalphabio.com/assets/CliLogin-CHuvQGAA.js
+    http_status: 200
+    note: login-code copy flow, Cognito domain check, cookie probe
+  - url: https://pypi.org/pypi/aab/json
+    http_status: 200
+    note: unrelated third-party package (Anki Add-on Builder)
+  - url: https://api.github.com/orgs/A-Alpha-Bio/repos
+    http_status: 200
+    note: 1 public repo — alphabind; no CLI

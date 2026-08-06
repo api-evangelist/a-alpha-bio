@@ -1,0 +1,118 @@
+# A-Alpha Bio
+
+> A-Alpha Bio is a Seattle biotechnology company that measures, predicts and engineers protein-protein interactions.
+> Its experimental platform AlphaSeq reprograms yeast mating to quantify millions of binding affinities in a single
+> experiment; its computational platform AlphaBind predicts and optimizes antibody-antigen binding from sequence.
+> Atlas, launched July 2026, is the company's data platform: ML-ready protein interaction "Data Blocks" available for
+> licensing, on-demand custom data generation, and a quarterly-release consortium. Atlas is backed by a public HTTP
+> API — the Atlas Data Product API.
+
+Generated: 2026-08-06
+Method: generated (A-Alpha Bio publishes no llms.txt — /llms.txt returns 404 on www.aalphabio.com and
+api.atlas.aalphabio.com, and soft-404s into the SPA shell on atlas.aalphabio.com)
+Source: https://github.com/api-evangelist/a-alpha-bio
+
+## What an agent can call without credentials
+
+The Atlas Data Product API at `https://api.atlas.aalphabio.com` serves three operations anonymously:
+
+- `GET /api/v1/datasets?include_locked=true&include_coming_soon=true` — the public Data Block catalogue.
+  IMPORTANT: with default flags this returns an empty `objects` array. You must set `include_locked=true`.
+- `GET /api/v1/datasets/{id}` — metadata for one Data Block.
+- `GET /api/v1/datasets/{id}/datacard` — the structured Data Card (executive summary, ML guidance, biology/assay).
+
+Everything else — CSV data, CSV schema, structure (.cif) files, figures — returns
+`401 {"detail":"Missing token"}` without an Atlas bearer token.
+
+## API
+
+- OpenAPI 3.1.0 (live): https://api.atlas.aalphabio.com/openapi.json
+- OpenAPI (harvested verbatim): openapi/a-alpha-bio-atlas-data-product-openapi-original.json
+- OpenAPI (refined, servers + tags declared): openapi/a-alpha-bio-atlas-datasets-openapi.yml
+- Overlay of API Evangelist enhancements: overlays/a-alpha-bio-atlas-datasets-overlay.yaml
+- Base URL: https://api.atlas.aalphabio.com
+- Version: path segment `/api/v1`; specification `info.version` 0.0.43
+
+### Operations
+
+- `listDatasets` — GET /api/v1/datasets — list accessible datasets (flags: all_versions, include_locked, include_coming_soon)
+- `getDataset` — GET /api/v1/datasets/{id} — dataset metadata (query: version)
+- `getDatasetDatacard` — GET /api/v1/datasets/{id}/datacard — structured Data Card (query: version)
+- `getDatasetData` — GET /api/v1/datasets/{id}/data — CSV via pre-signed S3 URL (query: max_rows, mode, redirect, version)
+- `getDatasetSchema` — GET /api/v1/datasets/{id}/schema — pandas-ready column schema (query: mode, version)
+- `listDatasetStructures` — GET /api/v1/datasets/{id}/structures — structure filenames (query: version)
+- `downloadDatasetStructures` — GET /api/v1/datasets/{id}/structures/download — pre-signed URL for a zip of all structures
+- `getDatasetStructure` — GET /api/v1/datasets/{id}/structures/{filename} — one structure file
+- `getDatasetFigure` — GET /api/v1/datasets/{id}/figures/{tab}/{filename} — a Data Card figure image
+
+## Authentication
+
+- HTTP bearer JWT: `Authorization: Bearer <token>`
+- Issued by an AWS Cognito user pool via the hosted-UI authorization-code flow the Atlas web app runs
+  (scopes: openid, email, profile, aws.cognito.signin.user.admin)
+- CLI clients use the browser-assisted login-code flow at https://atlas.aalphabio.com/cli-login
+- Detail: authentication/a-alpha-bio-authentication.yml
+
+## Conventions an agent should know
+
+- No pagination — `GET /api/v1/datasets` returns the whole collection in `objects[]`. No cursor, no Link header.
+- No rate-limit headers and no documented 429. Back off conservatively.
+- No request-id header on any response — there is nothing to quote in a support ticket.
+- Errors are NOT RFC 9457. The envelope is `{"detail": <string>}`, except 422 where `detail` is an ARRAY of
+  Pydantic validation objects. Check the type of `detail` before treating it as a string.
+- Binary payloads are handed off as pre-signed S3 URLs, by default as a 302. Pass `redirect=false` on
+  `getDatasetData` to get `{"url": "..."}` as JSON instead.
+- Pin `version` explicitly. Omitting it resolves to latest, which makes a training run non-reproducible across a
+  dataset re-release.
+- Undocumented but live: `GET /health` returns `{"status":"ok"}`.
+- Detail: conventions/a-alpha-bio-conventions.yml
+
+## Data model
+
+Single-root. Everything hangs off Dataset (a "Data Block"), which owns data modes, a Data Card, a CSV schema,
+structure files and figures. `product_kind` is the commercial model as an API field —
+`open-source` | `consortium` | `licensable` | `exclusive`.
+
+- data-model/a-alpha-bio-data-model.yml
+- json-schema/a-alpha-bio-dataset-item.json
+- json-schema/a-alpha-bio-datacard.json
+- json-schema/a-alpha-bio-dataset-schema.json
+
+## Agent skills
+
+- skills/_index.yml
+- skills/a-alpha-bio-browse-atlas-catalog.md
+- skills/a-alpha-bio-load-data-block-into-pandas.md
+
+## What does not exist
+
+Recorded so an agent does not go looking. All probed 2026-08-06.
+
+- No MCP server. `/mcp`, `/api/v1/mcp`, `/api/mcp`, `/sse` all 404 on the API host; `mcp.aalphabio.com` does not resolve.
+  A derived candidate tool map is at mcp/a-alpha-bio-mcp.yml — it is a proposal, not an A-Alpha Bio product.
+- No A2A agent card. `/.well-known/agent-card.json` and `/.well-known/agent.json` 404 on every host.
+- No `/.well-known/` documents at all — no security.txt, no openid-configuration, no oauth metadata.
+- No GraphQL endpoint.
+- No AsyncAPI, webhooks, or event surface of any kind.
+- No status page, no SLA, no changelog, no deprecation policy.
+- No published SDK or client library on npm, PyPI, or the A-Alpha-Bio GitHub org.
+- No developer documentation site. The only machine-readable contract is the served OpenAPI.
+
+## Company
+
+- Website: https://www.aalphabio.com/
+- Atlas platform: https://atlas.aalphabio.com/
+- Technology (AlphaSeq + AlphaBind): https://www.aalphabio.com/technology/
+- Applications: https://www.aalphabio.com/applications/
+- About: https://www.aalphabio.com/about/
+- News: https://www.aalphabio.com/media/
+- Blog: https://aalphabio.substack.com/
+- GitHub: https://github.com/A-Alpha-Bio (one public repo — alphabind, the AlphaBind model and pre-print code)
+- Contact: https://www.aalphabio.com/contact/
+- Terms: https://www.aalphabio.com/terms-of-service/
+- Privacy: https://www.aalphabio.com/privacy-notice/
+
+## About this file
+
+This is a third-party profile maintained by API Evangelist, not an A-Alpha Bio publication.
+https://apievangelist.com/about/where-our-data-comes-from

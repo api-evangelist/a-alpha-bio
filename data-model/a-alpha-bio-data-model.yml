@@ -1,0 +1,191 @@
+generated: '2026-08-06'
+method: derived
+source: openapi/a-alpha-bio-atlas-data-product-openapi-original.json
+docs: null
+api: Atlas Data Product API
+summary:
+  entities: 6
+  value_objects: 9
+  root_entity: Dataset
+  detail: >-
+    A single-root model. Everything in the Atlas Data Product API hangs off one entity — the Dataset, known
+    commercially as a "Data Block". A Dataset owns a set of data modes, a Data Card (three tab sub-documents), a CSV
+    schema, a set of structure files and a set of figures. There are no cross-entity foreign keys exposed on the
+    public API: the only identifier a caller ever holds is the dataset `id`.
+entities:
+- name: Dataset
+  schema: DatasetItem
+  id_field: id
+  id_format: >-
+    Lowercase `ab` prefix followed by a numeric block number, e.g. `ab673`, `ab1001`, `ab1479`, `ab1860` (observed
+    across all 16 public records on 2026-08-06). The prefix is not documented as a stable contract in the spec.
+  versioned: true
+  version_field: version
+  operations:
+  - listDatasets
+  - getDataset
+  fields_of_note:
+  - name: product
+    meaning: Commercial product family the block belongs to (observed values `atlas-vhh`, `licensable`).
+  - name: product_kind
+    meaning: Access-control category. Enumerated as ProductKind.
+  - name: locked
+    meaning: True when metadata is public but data requires a purchase or subscription. All 16 public records were locked.
+  - name: coming_soon
+    meaning: Teaser record — metadata visible, data not yet available to anyone; always locked.
+  - name: status
+    meaning: Editorial workflow state — draft / pending_review / published / retracted.
+  - name: binder
+    meaning: Binder molecule class for the experiment (observed `VHH`).
+  - name: target
+    meaning: Array of target classes (observed `viral`, `natural proteins`).
+  - name: tasks
+    meaning: ML tasks the block is suited to (observed `affinity prediction`, `cross-target generalization`, `optimization`).
+  - name: a_size / alpha_size
+    meaning: >-
+      Library sizes on the two sides of the AlphaSeq yeast-mating assay — the A-cell library and the Alpha-cell
+      library. Their product bounds the interaction space.
+  - name: total_ppi_count / unique_ppi_count / density
+    meaning: Measured protein-protein interaction counts and the fraction of the a_size x alpha_size grid covered.
+  - name: structure_count
+    meaning: Number of structure (.cif) files attached to the block.
+  - name: url
+    meaning: >-
+      Deep link to the dataset page in the Atlas web portal. NOTE — the spec's example still carries a legacy host
+      (`https://data.aalphabio.tools/dataset/ab1001`) while live responses return `https://atlas.aalphabio.com/dataset/<id>`.
+- name: DataMode
+  schema: DataMode
+  parent: Dataset
+  id_field: name
+  detail: >-
+    A named serialisation of the same dataset — observed `source` (raw experimental output) and `ml` (model-ready).
+    Selected with the `mode` query parameter on the data and schema operations. Backed on S3 as
+    `data.<mode>.csv.gz` / `data.<mode>.schema.json`.
+- name: Datacard
+  schema: DatacardResponse
+  parent: Dataset
+  cardinality: one per dataset version
+  operations:
+  - getDatasetDatacard
+  detail: >-
+    A three-tab structured document — `exec` (ExecCardContent), `ml` (MlCardContentResponse), `bio` (BioCardContent) —
+    mirroring the Atlas portal's dataset detail page. This is A-Alpha Bio's model-card analogue for training data.
+- name: DatasetSchema
+  schema: DatasetSchemaResponse
+  parent: Dataset
+  cardinality: one per dataset version per mode
+  operations:
+  - getDatasetSchema
+  detail: >-
+    `{dtype: {column: pandas-dtype}, parse_dates: [column]}` — shaped to unpack directly into
+    `pd.read_csv(url, **schema)`. Derived at request time from the mode's `.schema.json` on S3.
+- name: StructureFile
+  schema: DatasetStructureListResponse.files[] (filenames only)
+  parent: Dataset
+  id_field: filename
+  operations:
+  - listDatasetStructures
+  - getDatasetStructure
+  - downloadDatasetStructures
+  detail: >-
+    Predicted/validated complex structures, `.cif`, addressed by filename within the dataset's structures directory.
+    The bulk operation returns a pre-signed S3 URL for a zip of all of them. No per-file metadata entity is exposed —
+    the list is bare strings.
+- name: Figure
+  schema: (binary content; no JSON schema)
+  parent: Dataset
+  id_field: filename
+  scoped_by: tab
+  operations:
+  - getDatasetFigure
+  detail: >-
+    Images referenced by CardContentFigure.filenames, fetched per Data Card tab
+    (`/datasets/{id}/figures/{tab}/{filename}`). The Data Card names them; this operation serves the bytes.
+value_objects:
+- CardContentUseCase
+- CardContentTitleBody
+- CardContentStatSubs
+- CardContentFigure
+- CardContentNoiseSignal
+- CardContentDataView
+- CardContentSchemaColumn
+- DatasetFileUrlResponse
+- ValidationError
+relationships:
+- from: Dataset
+  to: DataMode
+  type: has_many
+  via: modes[]
+- from: Dataset
+  to: Datacard
+  type: has_one
+  via: 'GET /api/v1/datasets/{id}/datacard'
+- from: Dataset
+  to: DatasetSchema
+  type: has_one
+  via: 'GET /api/v1/datasets/{id}/schema (per mode)'
+- from: Dataset
+  to: StructureFile
+  type: has_many
+  via: 'GET /api/v1/datasets/{id}/structures'
+- from: Dataset
+  to: Figure
+  type: has_many
+  via: CardContentFigure.filenames referenced from the Data Card, fetched per tab
+- from: Datacard
+  to: ExecCardContent
+  type: has_one
+  via: exec
+- from: Datacard
+  to: MlCardContentResponse
+  type: has_one
+  via: ml
+- from: Datacard
+  to: BioCardContent
+  type: has_one
+  via: bio
+- from: MlCardContentResponse
+  to: CardContentSchemaColumn
+  type: has_many
+  via: schema_columns[] (sourced from S3 at request time, never persisted)
+- from: BioCardContent
+  to: CardContentFigure
+  type: has_many
+  via: figures[]
+enumerations:
+- name: ProductKind
+  field: DatasetItem.product_kind
+  values:
+  - value: open-source
+    meaning: Bypasses license and subscription checks entirely.
+  - value: consortium
+    meaning: >-
+      Gated behind a product-scoped subscription with the product release date as the subscriber gate; per-block
+      license rows grant perpetual access.
+  - value: licensable
+    meaning: No subscription path — access requires a license row. Any number of companies may be licensed.
+  - value: exclusive
+    meaning: >-
+      No subscription path and licensing restricted to a single company (the dataset's designer). Exclusive blocks
+      are always hidden from non-licensees regardless of the public-metadata flag.
+  note: >-
+    This enum is the commercial model of the whole Atlas business rendered as an API field — it is the most
+    information-dense thing in the specification.
+- name: status
+  field: DatasetItem.status
+  values: [draft, pending_review, published, retracted]
+- name: mode
+  field: DataMode.name
+  values_observed: [source, ml]
+  note: Not enumerated in the schema — free-form string, discovered per dataset from `modes[]`.
+observed_population:
+  fetched: '2026-08-06'
+  url: https://api.atlas.aalphabio.com/api/v1/datasets?include_locked=true&include_coming_soon=true
+  http_status: 200
+  datasets: 16
+  by_product_kind:
+    consortium: 5
+    licensable: 11
+  locked: 16
+  coming_soon: 11
+  note: Sample response saved verbatim to examples/a-alpha-bio-list-datasets-response.json

@@ -1,0 +1,370 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/a-alpha-bio/refs/heads/main/json-schema/a-alpha-bio-dataset-item.json",
+  "title": "DatasetItem",
+  "description": "A single dataset item.",
+  "x-generated": "2026-08-06",
+  "x-method": "derived",
+  "x-source": "openapi/a-alpha-bio-atlas-data-product-openapi-original.json#/components/schemas/DatasetItem",
+  "properties": {
+    "id": {
+      "type": "string",
+      "title": "Id",
+      "description": "Dataset identifier",
+      "examples": [
+        "ab1001"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "title": "Name",
+      "description": "Display name of the dataset",
+      "examples": [
+        "AlphaBlock 1001"
+      ]
+    },
+    "experiment": {
+      "type": "string",
+      "title": "Experiment",
+      "description": "Brief description of the experiment",
+      "examples": [
+        "This dataset explores the local affinity landscape..."
+      ]
+    },
+    "details": {
+      "type": "string",
+      "title": "Details",
+      "description": "Detailed description with bullet points",
+      "examples": [
+        "* Paratope coverage: >600 mutations..."
+      ]
+    },
+    "modes": {
+      "items": {
+        "$ref": "#/$defs/DataMode"
+      },
+      "type": "array",
+      "title": "Modes",
+      "description": "Available data modes for this dataset",
+      "examples": [
+        [
+          {
+            "file_type": "csv.gz",
+            "name": "source"
+          },
+          {
+            "file_type": "csv.gz",
+            "name": "ml"
+          }
+        ]
+      ]
+    },
+    "release_date": {
+      "type": "string",
+      "title": "Release Date",
+      "description": "Release date of the dataset",
+      "examples": [
+        "2024-01-15"
+      ]
+    },
+    "version": {
+      "type": "string",
+      "title": "Version",
+      "description": "Current version of the dataset",
+      "examples": [
+        "1"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "description": "Workflow status of this dataset version (draft, pending_review, published, retracted). Non-published statuses are only ever returned to admins previewing with drafts included.",
+      "default": "published",
+      "examples": [
+        "published",
+        "draft"
+      ]
+    },
+    "locked": {
+      "type": "boolean",
+      "title": "Locked",
+      "description": "Whether the dataset is locked (user has no access to data)",
+      "default": true,
+      "examples": [
+        false
+      ]
+    },
+    "coming_soon": {
+      "type": "boolean",
+      "title": "Coming Soon",
+      "description": "Whether the dataset is an upcoming release shown as a teaser. When true the metadata is visible but the data is not yet available to anyone; the card is always locked.",
+      "default": false,
+      "examples": [
+        false
+      ]
+    },
+    "url": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Url",
+      "description": "URL to the dataset page in the web portal",
+      "examples": [
+        "https://data.aalphabio.tools/dataset/ab1001"
+      ]
+    },
+    "structure_count": {
+      "type": "integer",
+      "title": "Structure Count",
+      "description": "Number of structure files (.cif) available in the structures directory",
+      "default": 0,
+      "examples": [
+        74973
+      ]
+    },
+    "tasks": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "title": "Tasks",
+      "description": "List of task types for this dataset",
+      "examples": [
+        [
+          "optimization",
+          "design"
+        ]
+      ]
+    },
+    "binder": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Binder",
+      "description": "Binder type for this dataset",
+      "examples": [
+        "VHH"
+      ]
+    },
+    "target": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "title": "Target",
+      "description": "List of target types for this dataset",
+      "examples": [
+        [
+          "viral",
+          "COVID"
+        ]
+      ]
+    },
+    "product": {
+      "type": "string",
+      "title": "Product",
+      "description": "Product slug for this dataset",
+      "examples": [
+        "atlas-vhh",
+        "exclusive",
+        "open-source"
+      ]
+    },
+    "product_display_name": {
+      "type": "string",
+      "title": "Product Display Name",
+      "description": "Human-readable product name",
+      "examples": [
+        "Atlas VHH Consortia",
+        "Exclusive",
+        "Open Source"
+      ]
+    },
+    "product_kind": {
+      "$ref": "#/$defs/ProductKind",
+      "description": "Category of the dataset's product",
+      "examples": [
+        "consortium",
+        "exclusive",
+        "open-source"
+      ]
+    },
+    "source": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Source",
+      "description": "Product release name (for datasets in a named product release)",
+      "examples": [
+        "VHH Q1 2025"
+      ]
+    },
+    "a_size": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "A Size",
+      "description": "Number of A (binder) sequences in the dataset",
+      "examples": [
+        500
+      ]
+    },
+    "alpha_size": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Alpha Size",
+      "description": "Number of Alpha (target) sequences in the dataset",
+      "examples": [
+        200
+      ]
+    },
+    "total_ppi_count": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Total Ppi Count",
+      "description": "Total number of protein-protein interactions measured",
+      "examples": [
+        100000
+      ]
+    },
+    "unique_ppi_count": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Unique Ppi Count",
+      "description": "Number of unique protein-protein interactions",
+      "examples": [
+        50000
+      ]
+    },
+    "density": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Density",
+      "description": "Fraction of (a_size * alpha_size) grid actually observed",
+      "examples": [
+        0.52
+      ]
+    },
+    "tags": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "title": "Tags",
+      "description": "List of tags for this dataset",
+      "examples": [
+        [
+          "dSSM",
+          "optimization"
+        ]
+      ]
+    },
+    "has_tutorial": {
+      "type": "boolean",
+      "title": "Has Tutorial",
+      "description": "Whether this dataset has a Jupyter notebook tutorial available",
+      "default": false,
+      "examples": [
+        true
+      ]
+    }
+  },
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "experiment",
+    "details",
+    "modes",
+    "release_date",
+    "version",
+    "product",
+    "product_display_name",
+    "product_kind"
+  ],
+  "$defs": {
+    "DataMode": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name",
+          "description": "Mode name",
+          "examples": [
+            "source",
+            "ml"
+          ]
+        },
+        "file_type": {
+          "type": "string",
+          "title": "File Type",
+          "description": "File type (csv or csv.gz)",
+          "examples": [
+            "csv.gz"
+          ]
+        }
+      },
+      "type": "object",
+      "required": [
+        "name",
+        "file_type"
+      ],
+      "title": "DataMode",
+      "description": "A data mode available for a dataset."
+    },
+    "ProductKind": {
+      "type": "string",
+      "enum": [
+        "consortium",
+        "exclusive",
+        "licensable",
+        "open-source"
+      ],
+      "title": "ProductKind",
+      "description": "Category that a `product_types` row belongs to.\n\nStored on `ProductTypeEnum.kind`. Drives access control:\n\n- `open-source` bypasses license and subscription checks.\n- `consortium` gates access behind a `ProductSubscription` scoped to\n  the product (with `product_release.release_date` as the subscriber\n  gate); per-block `dataset_licenses` rows grant perpetual access.\n- `licensable` has no subscription path; access requires a\n  `dataset_licenses` row. Any number of companies can be licensed.\n- `exclusive` has no subscription path AND restricts licensing to a\n  single company — the dataset's `designer`. Exclusive blocks are\n  also always hidden from non-licensees (the\n  `metadata_visible_to_public` flag is ignored)."
+    }
+  }
+}

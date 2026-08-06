@@ -42,5 +42,25 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-A-Alpha Bio is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://augment.market/c/a-alpha-bio
+A-Alpha Bio is a Seattle biotechnology company that measures, predicts and engineers protein-protein
+interactions. Its experimental platform **AlphaSeq** reprograms yeast mating to quantify millions of protein-protein
+binding affinities in a single experiment; its computational platform **AlphaBind** predicts and optimizes
+antibody-antigen binding from sequence. In July 2026 the company launched **Atlas**, a data platform publishing
+ML-ready protein interaction "Data Blocks" for licensing, custom on-demand data generation, and a quarterly-release
+consortium whose founding members include GSK, Boltz, Cradle and Dyno Therapeutics.
+
+## API surface
+
+Atlas is backed by a public HTTP API — the **Atlas Data Product API** at `https://api.atlas.aalphabio.com`, which
+serves a live OpenAPI 3.1.0 document at `/openapi.json`. Nine read operations over Data Blocks. Dataset discovery,
+dataset metadata and structured Data Cards answer **anonymously**; CSV data, CSV schemas and structure (`.cif`) files
+require a bearer token issued through AWS Cognito sign-in.
+
+The API is not linked from any A-Alpha Bio documentation — it was found by reading the preconnect hint in the Atlas
+web app's HTML shell. There is no developer portal, no `/llms.txt`, no `/.well-known/` document, no MCP server, no
+agent card, no status page and no changelog.
+
+- Website — https://www.aalphabio.com/
+- Atlas — https://atlas.aalphabio.com/
+- GitHub — https://github.com/A-Alpha-Bio
+- Blog — https://aalphabio.substack.com/

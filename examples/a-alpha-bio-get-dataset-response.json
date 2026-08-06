@@ -1,0 +1,51 @@
+{
+  "dataset": {
+    "id": "ab1001",
+    "name": "VHH72 dSSM — paratope × epitope, SARS-CoV-1 RBD",
+    "experiment": "Deep site-saturation mutagenesis of the VHH72 paratope (>600 mutations, >30 positions) crossed against a SARS-CoV-1 RBD epitope library (>2,000 mutations, >100 positions), yielding >1M protein-protein interactions for local affinity landscape mapping.",
+    "details": "- Paratope coverage: >600 mutations across >30 paratope positions\n- Epitope coverage: >2,000 mutations across >100 epitope positions\n- Scale: >1,000,000 protein–protein interactions (PPIs)\n- Suitable for: affinity regressors, affinity optimization, exploring antigen sensitivity to a VHH\n",
+    "modes": [
+      {
+        "name": "source",
+        "file_type": "csv.gz"
+      },
+      {
+        "name": "ml",
+        "file_type": "csv.gz"
+      }
+    ],
+    "release_date": "2026-05-25",
+    "version": "1",
+    "status": "published",
+    "locked": true,
+    "coming_soon": false,
+    "url": "https://atlas.aalphabio.com/dataset/ab1001",
+    "structure_count": 0,
+    "tasks": [
+      "optimization",
+      "affinity prediction"
+    ],
+    "binder": "VHH",
+    "target": [
+      "COVID",
+      "natural proteins",
+      "viral"
+    ],
+    "product": "atlas-vhh",
+    "product_display_name": "Atlas-VHH Consortium",
+    "product_kind": "consortium",
+    "source": "VHH Q2 2026",
+    "a_size": 655,
+    "alpha_size": 2344,
+    "total_ppi_count": 1718344,
+    "unique_ppi_count": 1535320,
+    "density": 0.52,
+    "tags": [
+      "cross-reactivity",
+      "dSSM",
+      "optimization",
+      "VHH72"
+    ],
+    "has_tutorial": false
+  }
+}

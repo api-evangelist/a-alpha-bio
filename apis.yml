@@ -1,23 +1,149 @@
 aid: a-alpha-bio
 name: A-Alpha Bio
-description: 'A-Alpha Bio is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  A-Alpha Bio is a Seattle biotechnology company, founded in 2017 out of the University of Washington's Institute for
+  Protein Design and Center for Synthetic Biology, that measures, predicts and engineers protein-protein interactions.
+  Its experimental platform AlphaSeq reprograms yeast mating to quantify millions of protein-protein binding affinities
+  in a single experiment, and its computational platform AlphaBind is a domain-specific deep-learning model trained on
+  hundreds of millions of those affinity measurements to predict and optimize antibody-antigen binding from sequence. In
+  July 2026 the company launched Atlas, a web platform and data ecosystem that publishes ML-ready protein interaction
+  "Data Blocks" for licensing, custom on-demand data generation, and a quarterly-release Atlas Consortium whose founding
+  members include GSK, Boltz, Cradle and Dyno Therapeutics. Atlas is backed by a public HTTP API — the Data Product API
+  at api.atlas.aalphabio.com — which serves dataset discovery, dataset metadata and structured Data Cards anonymously,
+  and gates CSV data, CSV schemas and structure (.cif) files behind a bearer token issued through AWS Cognito sign-in.
 url: https://raw.githubusercontent.com/api-evangelist/a-alpha-bio/refs/heads/main/apis.yml
+image: https://www.aalphabio.com/icons/icon-512x512.png
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-06'
 modified: '2026-08-06'
 tags:
-- Company
-apis: []
+- protein-interactions
+- biotechnology
+- drug-discovery
+- antibody-engineering
+- synthetic-biology
+- machine-learning
+- training-data
+- data-licensing
+- life-sciences
+- datasets
+- protein-design
+- bioinformatics
+apis:
+- name: Atlas Data Product API
+  description: >-
+    The HTTP API behind Atlas, A-Alpha Bio's protein-protein interaction data platform. Nine read operations over Atlas
+    "Data Blocks": list accessible datasets (with flags for all versions, locked/purchasable datasets and coming-soon
+    teasers), fetch a dataset's metadata, fetch its structured Data Card (exec / ML / biology tabs), download the
+    dataset CSV via a pre-signed S3 redirect, read the CSV column schema in a form that unpacks straight into
+    pandas.read_csv, and list, fetch or bulk-download the dataset's structure (.cif) files. Dataset discovery,
+    metadata and Data Cards answer anonymously; data, schema and structure endpoints require an HTTP bearer token.
+  humanURL: https://atlas.aalphabio.com/
+  baseURL: https://api.atlas.aalphabio.com
+  tags:
+  - protein-interactions
+  - datasets
+  - training-data
+  - data-licensing
+  - machine-learning
+  - antibody-engineering
+  properties:
+  - type: OpenAPI
+    url: openapi/a-alpha-bio-atlas-datasets-openapi.yml
+  - type: OpenAPI
+    url: openapi/a-alpha-bio-atlas-data-product-openapi-original.json
+  - type: Overlay
+    url: overlays/a-alpha-bio-atlas-datasets-overlay.yaml
+  - type: Authentication
+    url: authentication/a-alpha-bio-authentication.yml
+  - type: Conventions
+    url: conventions/a-alpha-bio-conventions.yml
+  - type: ErrorCatalog
+    url: errors/a-alpha-bio-problem-types.yml
+  - type: DataModel
+    url: data-model/a-alpha-bio-data-model.yml
+  - type: JSONSchema
+    url: json-schema/a-alpha-bio-dataset-item.json
+  - type: JSONSchema
+    url: json-schema/a-alpha-bio-datacard.json
+  - type: JSONSchema
+    url: json-schema/a-alpha-bio-dataset-schema.json
+  - type: Examples
+    url: examples/a-alpha-bio-list-datasets-response.json
+  - type: Examples
+    url: examples/a-alpha-bio-get-dataset-response.json
+  - type: Examples
+    url: examples/a-alpha-bio-get-dataset-datacard-response.json
+  - type: MCPServer
+    url: mcp/a-alpha-bio-mcp.yml
+  - type: AgentSkill
+    url: skills/_index.yml
+  - type: Portal
+    url: https://atlas.aalphabio.com/
+common:
+- type: DomainSecurity
+  url: security/a-alpha-bio-domain-security.yml
+- type: Website
+  url: https://www.aalphabio.com/
+- type: DeveloperPortal
+  url: https://atlas.aalphabio.com/
+- type: SignUp
+  url: https://atlas.aalphabio.com/
+- type: Login
+  url: https://atlas.aalphabio.com/
+- type: Blog
+  url: https://aalphabio.substack.com/
+- type: BlogRSS
+  url: https://aalphabio.substack.com/feed
+- type: News
+  url: https://www.aalphabio.com/media/
+- type: GitHubOrganization
+  url: https://github.com/A-Alpha-Bio
+- type: Support
+  url: https://www.aalphabio.com/contact/
+- type: TermsOfService
+  url: https://www.aalphabio.com/terms-of-service/
+- type: PrivacyPolicy
+  url: https://www.aalphabio.com/privacy-notice/
+- type: About
+  url: https://www.aalphabio.com/about/
+- type: Careers
+  url: https://www.aalphabio.com/careers/
+- type: Twitter
+  url: https://twitter.com/AAlphaBio
+- type: LinkedIn
+  url: https://linkedin.com/company/aalphabio/
+- type: SourceCode
+  url: https://github.com/A-Alpha-Bio/alphabind
+- type: Authentication
+  url: authentication/a-alpha-bio-authentication.yml
+- type: Conventions
+  url: conventions/a-alpha-bio-conventions.yml
+- type: ErrorCatalog
+  url: errors/a-alpha-bio-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/a-alpha-bio-lifecycle.yml
+- type: Conformance
+  url: conformance/a-alpha-bio-conformance.yml
+- type: DataModel
+  url: data-model/a-alpha-bio-data-model.yml
+- type: CLI
+  url: cli/a-alpha-bio-cli.yml
+- type: MCPServer
+  url: mcp/a-alpha-bio-mcp.yml
+- type: LLMsTxt
+  url: llms/a-alpha-bio-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
-common:
-- type: Website
-  url: https://augment.market/c/a-alpha-bio
+x-enrichment:
+  date: '2026-08-06'
+  status: enriched
+  artifacts_added: 23
+  pass: local-v1

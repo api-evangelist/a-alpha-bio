@@ -1,0 +1,77 @@
+generated: '2026-08-06'
+method: searched
+source: https://api.atlas.aalphabio.com/openapi.json
+docs: https://atlas.aalphabio.com/
+summary:
+  types:
+  - http
+  - oauth2
+  style: >-
+    HTTP bearer JWT on the Atlas Data Product API. The token is minted by an AWS Cognito user pool through the hosted
+    OAuth 2.0 authorization-code flow that the Atlas web client runs; the API itself only ever sees the bearer header.
+  anonymous_access: partial
+  anonymous_note: >-
+    Verified live 2026-08-06: dataset discovery, dataset metadata and Data Cards answer with no Authorization header at
+    all; the data / schema / structures operations return 401 {"detail":"Missing token"}. An invalid bearer token is
+    NOT rejected on the anonymous-readable operations — GET /api/v1/datasets with `Authorization: Bearer invalid`
+    returns 200 with an empty `objects` array rather than a 401, so a bad token is treated as "no entitlements", not
+    as an authentication failure.
+schemes:
+- name: HTTPBearer
+  type: http
+  scheme: bearer
+  bearer_format: JWT
+  description: >-
+    Declared on all nine operations of the Data Product API. Carries an AWS Cognito access token; the Atlas SPA attaches
+    it via an axios request interceptor over the `Authorization: Bearer <token>` header.
+  sources:
+  - openapi/a-alpha-bio-atlas-data-product-openapi-original.json
+  - openapi/a-alpha-bio-atlas-datasets-openapi.yml
+- name: CognitoHostedUI
+  type: oauth2
+  flow: authorizationCode
+  response_type: code
+  provider: AWS Cognito user pool (hosted UI)
+  scopes_requested:
+  - openid
+  - email
+  - profile
+  - aws.cognito.signin.user.admin
+  description: >-
+    Not declared in the OpenAPI. Observed in the Atlas web client's published JavaScript bundle, which configures AWS
+    Amplify `Auth.Cognito` with `loginWith.oauth` (authorization-code response type, redirect to `<origin>/callback`)
+    and the four scopes above. These are Cognito sign-in scopes, not per-resource API scopes — the Data Product API
+    declares no scope requirements of its own, so no `scopes/` artifact is emitted.
+  sources:
+  - https://atlas.aalphabio.com/assets/App-DfcS_Q-d.js
+clients:
+- name: Atlas web client
+  url: https://atlas.aalphabio.com/
+  flow: Cognito hosted-UI authorization code, token attached as bearer by the SPA
+- name: Atlas CLI client
+  url: https://atlas.aalphabio.com/cli-login
+  flow: >-
+    Browser-assisted device-style login — the `/cli-login` page signs the user in against the same Cognito domain and
+    then displays a short-lived "login code" the user pastes back into the terminal to finish signing in to the Atlas
+    client. See cli/a-alpha-bio-cli.yml.
+x-evidence:
+  fetched: '2026-08-06'
+  probes:
+  - url: https://api.atlas.aalphabio.com/openapi.json
+    http_status: 200
+    note: OpenAPI 3.1.0, components.securitySchemes.HTTPBearer = {type http, scheme bearer}
+  - url: https://api.atlas.aalphabio.com/api/v1/datasets
+    http_status: 200
+    note: no Authorization header sent; returns {"objects":[]}
+  - url: https://api.atlas.aalphabio.com/api/v1/datasets?include_locked=true&include_coming_soon=true
+    http_status: 200
+    note: no Authorization header sent; returns 16 public dataset records
+  - url: https://api.atlas.aalphabio.com/api/v1/datasets/ab1001/data
+    http_status: 401
+    note: '{"detail":"Missing token"}'
+  - url: https://api.atlas.aalphabio.com/api/v1/datasets/ab1001/schema
+    http_status: 401
+    note: '{"detail":"Missing token"}'
+  - url: https://atlas.aalphabio.com/assets/App-DfcS_Q-d.js
+    http_status: 200
+    note: Amplify Cognito OAuth config with the four requested scopes

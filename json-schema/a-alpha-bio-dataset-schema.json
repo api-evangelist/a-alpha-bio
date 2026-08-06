@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/a-alpha-bio/refs/heads/main/json-schema/a-alpha-bio-dataset-schema.json",
+  "title": "DatasetSchemaResponse",
+  "description": "Response from GET /datasets/{id}/schema endpoint.",
+  "x-generated": "2026-08-06",
+  "x-method": "derived",
+  "x-source": "openapi/a-alpha-bio-atlas-data-product-openapi-original.json#/components/schemas/DatasetSchemaResponse",
+  "properties": {
+    "dtype": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object",
+      "title": "Dtype",
+      "description": "Column name to pandas dtype mapping",
+      "examples": [
+        {
+          "id": "Int64",
+          "name": "string",
+          "score": "float64"
+        }
+      ]
+    },
+    "parse_dates": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "title": "Parse Dates",
+      "description": "Column names to parse as datetime",
+      "examples": [
+        [
+          "created_at",
+          "updated_at"
+        ]
+      ]
+    }
+  },
+  "type": "object",
+  "required": [
+    "dtype"
+  ]
+}
