@@ -32,30 +32,16 @@ tags:
 - protein-design
 - bioinformatics
 apis:
-- name: Atlas Data Product API
-  description: >-
-    The HTTP API behind Atlas, A-Alpha Bio's protein-protein interaction data platform. Nine read operations over Atlas
-    "Data Blocks": list accessible datasets (with flags for all versions, locked/purchasable datasets and coming-soon
-    teasers), fetch a dataset's metadata, fetch its structured Data Card (exec / ML / biology tabs), download the
-    dataset CSV via a pre-signed S3 redirect, read the CSV column schema in a form that unpacks straight into
-    pandas.read_csv, and list, fetch or bulk-download the dataset's structure (.cif) files. Dataset discovery,
-    metadata and Data Cards answer anonymously; data, schema and structure endpoints require an HTTP bearer token.
+- aid: a-alpha-bio:a-alpha-bio-datasets-api
+  name: A-Alpha Bio Datasets API
+  description: The Datasets API from A-Alpha Bio — 9 operation(s) for datasets.
   humanURL: https://atlas.aalphabio.com/
   baseURL: https://api.atlas.aalphabio.com
   tags:
-  - protein-interactions
-  - datasets
-  - training-data
-  - data-licensing
-  - machine-learning
-  - antibody-engineering
+  - Datasets
   properties:
   - type: OpenAPI
-    url: openapi/a-alpha-bio-atlas-datasets-openapi.yml
-  - type: OpenAPI
-    url: openapi/a-alpha-bio-atlas-data-product-openapi-original.json
-  - type: Overlay
-    url: overlays/a-alpha-bio-atlas-datasets-overlay.yaml
+    url: openapi/a-alpha-bio-datasets-api-openapi.yml
   - type: Authentication
     url: authentication/a-alpha-bio-authentication.yml
   - type: Conventions
@@ -76,13 +62,16 @@ apis:
     url: examples/a-alpha-bio-get-dataset-response.json
   - type: Examples
     url: examples/a-alpha-bio-get-dataset-datacard-response.json
-  - type: MCPServer
-    url: mcp/a-alpha-bio-mcp.yml
-  - type: AgentSkill
-    url: skills/_index.yml
   - type: Portal
     url: https://atlas.aalphabio.com/
 common:
+- type: Overlay
+  url: overlays/a-alpha-bio-atlas-datasets-overlay.yaml
+- type: IssueTracker
+  url: https://github.com/A-Alpha-Bio/alphabind/issues
+- type: License
+  name: MIT
+  url: https://github.com/A-Alpha-Bio/alphabind/blob/main/LICENSE
 - type: DomainSecurity
   url: security/a-alpha-bio-domain-security.yml
 - type: Website
