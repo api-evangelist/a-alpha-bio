@@ -1,0 +1,308 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "A Alpha Bio Datasets API",
+    "version": "0.0.43"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Datasets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List accessible datasets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.atlas.aalphabio.com/api/v1/datasets",
+            "params": [
+              {
+                "name": "all_versions",
+                "value": "",
+                "type": "query",
+                "description": "Include all versions, not just latest"
+              },
+              {
+                "name": "include_locked",
+                "value": "",
+                "type": "query",
+                "description": "Include locked datasets (purchasable datasets the user hasn't unlocked yet)"
+              },
+              {
+                "name": "include_coming_soon",
+                "value": "",
+                "type": "query",
+                "description": "Include coming-soon teaser datasets (upcoming releases with visible metadata but no data yet)"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all datasets the user can access, plus publicly visible datasets. By default returns only the latest version of each dataset and excludes locked datasets. Locked datasets are datasets whose metadata is publicly visible but whose data requires a purchase or subscription to access. Set `all_versions=true` to include all versions. Set `include_locked=true` to include locked datasets. Coming-soon teasers are excluded by default; set `include_coming_soon=true` to include them."
+        },
+        {
+          "info": {
+            "name": "Get dataset metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.atlas.aalphabio.com/api/v1/datasets/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the metadata for a specific dataset. Use optional `version` query param to get a specific version (defaults to latest)."
+        },
+        {
+          "info": {
+            "name": "Get dataset Data Card",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.atlas.aalphabio.com/api/v1/datasets/:id/datacard",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the structured Data Card for a specific dataset. Use optional `version` query param to get a specific version (defaults to latest)."
+        },
+        {
+          "info": {
+            "name": "Get dataset CSV data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.atlas.aalphabio.com/api/v1/datasets/:id/data",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "max_rows",
+                "value": "",
+                "type": "query",
+                "description": "Limit number of data rows returned"
+              },
+              {
+                "name": "mode",
+                "value": "",
+                "type": "query",
+                "description": "Data mode to retrieve"
+              },
+              {
+                "name": "redirect",
+                "value": "",
+                "type": "query",
+                "description": "Set to `false` to return URL in JSON instead of 302 redirect"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns dataset CSV data. Redirects to a presigned S3 URL for the data file. Query params: `version` (defaults to latest), `max_rows` (limit rows), `mode` (data mode), `redirect` (`false` for JSON URL)."
+        },
+        {
+          "info": {
+            "name": "Get dataset CSV schema",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.atlas.aalphabio.com/api/v1/datasets/:id/schema",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "mode",
+                "value": "",
+                "type": "query",
+                "description": "Data mode to retrieve schema for"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the column schema for a dataset's CSV data. The response can be unpacked directly into `pd.read_csv(url, **schema)`. Query params: `version` (defaults to latest), `mode` (data mode)."
+        },
+        {
+          "info": {
+            "name": "List dataset structure files",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.atlas.aalphabio.com/api/v1/datasets/:id/structures",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a list of structure files in the dataset. Use optional `version` query param (defaults to latest)."
+        },
+        {
+          "info": {
+            "name": "Download all structure files as a zip archive",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.atlas.aalphabio.com/api/v1/datasets/:id/structures/download",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a pre-signed S3 URL for a zip archive of all structure files. Use optional `version` query param (defaults to latest)."
+        },
+        {
+          "info": {
+            "name": "Get dataset structure file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.atlas.aalphabio.com/api/v1/datasets/:id/structures/:filename",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "filename",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the content of a structure file (e.g., `.cif`) from the dataset's structures directory. Use optional `version` query param (defaults to latest)."
+        },
+        {
+          "info": {
+            "name": "Get dataset figure content",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.atlas.aalphabio.com/api/v1/datasets/:id/figures/:tab/:filename",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "tab",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "filename",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the raw bytes of a figure referenced by `card_content.bio.figures[*].filenames[*]`. Figures are grouped by the dataset-page tab that renders them (e.g. `bio`) so each tab's images live under a predictable S3 prefix. Same access level as GET /datasets/{id}."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

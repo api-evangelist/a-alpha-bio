@@ -1,0 +1,17 @@
+{
+  "provider": "a-alpha-bio",
+  "sources": [
+    "a-alpha-bio-datasets-api-openapi.yml"
+  ],
+  "outputs": [
+    "a-alpha-bio-datasets-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "a-alpha-bio-datasets-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": []
+}
