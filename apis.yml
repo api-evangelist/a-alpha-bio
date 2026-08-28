@@ -12,6 +12,20 @@ description: >-
   at api.atlas.aalphabio.com — which serves dataset discovery, dataset metadata and structured Data Cards anonymously,
   and gates CSV data, CSV schemas and structure (.cif) files behind a bearer token issued through AWS Cognito sign-in.
 url: https://raw.githubusercontent.com/api-evangelist/a-alpha-bio/refs/heads/main/apis.yml
+deliveryModel:
+  model: open-core
+  license: MIT
+  open_source: true
+  commercial: true
+  callable_host: true
+  label: Open core · an OSS project plus a commercial hosted product
+  confidence: high
+  source:
+  - license
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://www.aalphabio.com/icons/icon-512x512.png
 x-type: company
 x-source: harvest:secondary-market
