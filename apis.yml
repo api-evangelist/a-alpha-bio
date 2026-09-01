@@ -34,17 +34,17 @@ created: '2026-08-06'
 modified: '2026-08-06'
 tags:
 - protein-interactions
-- biotechnology
-- drug-discovery
-- antibody-engineering
-- synthetic-biology
-- machine-learning
-- training-data
-- data-licensing
-- life-sciences
+- Biotechnology
+- Drug Discovery
+- Antibody Engineering
+- Synthetic Biology
+- Machine-Learning
+- Training Data
+- Data Licensing
+- Life Sciences
 - Datasets
-- protein-design
-- bioinformatics
+- Protein Design
+- Bioinformatics
 tags_raw:
 - protein-interactions
 - biotechnology
