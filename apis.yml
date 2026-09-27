@@ -51,7 +51,7 @@ tags:
 - Drug Discovery
 - Antibody Engineering
 - Synthetic Biology
-- Machine-Learning
+- Machine Learning
 - Training Data
 - Data Licensing
 - Life Sciences
@@ -71,6 +71,7 @@ tags_raw:
 - datasets
 - protein-design
 - bioinformatics
+- Machine-Learning
 apis:
 - aid: a-alpha-bio:a-alpha-bio-datasets-api
   name: A-Alpha Bio Datasets API

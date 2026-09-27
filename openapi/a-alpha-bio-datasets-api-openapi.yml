@@ -450,34 +450,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    CardContentDataView:
-      properties:
-        name:
-          type: string
-          title: Name
-        description:
-          type: string
-          title: Description
-        mode:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Mode
-      type: object
-      required:
-      - name
-      - description
-      title: CardContentDataView
-      description: 'One item in the ''Data views'' section.
-
-
-        ``mode`` is the view''s data-pair handle token (e.g. ``source``, ``ml``): the
-
-        admin editor stores each view''s S3 pair as ``data.<mode>.csv.gz`` /
-
-        ``data.<mode>.schema.json`` and the public API serves it under that mode. The
-
-        portal detail page itself ignores it.'
     DatasetStructureListResponse:
       properties:
         files:
@@ -491,6 +463,52 @@ components:
       - files
       title: DatasetStructureListResponse
       description: Response from GET /datasets/{id}/structures endpoint.
+    CardContentSchemaColumn:
+      properties:
+        name:
+          type: string
+          title: Name
+        type:
+          type: string
+          title: Type
+        description:
+          type: string
+          title: Description
+      type: object
+      required:
+      - name
+      - type
+      - description
+      title: CardContentSchemaColumn
+      description: One row of the 'Schema (key columns)' table.
+    CardContentFigure:
+      properties:
+        title:
+          type: string
+          title: Title
+        filenames:
+          items:
+            type: string
+          type: array
+          title: Filenames
+          description: Image filenames rendered as equal-width columns (e.g. ['affinity.svg'])
+        caption:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Caption
+      type: object
+      required:
+      - title
+      title: CardContentFigure
+      description: 'One figure in the ''Data analysis'' section.
+
+
+        "One figure" = one title + one caption, but may include multiple
+
+        side-by-side images via `filenames` — one image = full-width, N images
+
+        = N equal columns.'
     DatasetItem:
       properties:
         id:
@@ -704,6 +722,20 @@ components:
       - product_kind
       title: DatasetItem
       description: A single dataset item.
+    CardContentTitleBody:
+      properties:
+        title:
+          type: string
+          title: Title
+        body:
+          type: string
+          title: Body
+      type: object
+      required:
+      - title
+      - body
+      title: CardContentTitleBody
+      description: A {title, body} item — used for differentiation and key findings.
     MlCardContentResponse:
       properties:
         noise_signals:
@@ -740,34 +772,15 @@ components:
         stored ``MlCardContent`` cannot hold it, so a stale copy can never be
 
         persisted and there is nothing to strip on save.'
-    CardContentFigure:
-      properties:
-        title:
-          type: string
-          title: Title
-        filenames:
-          items:
-            type: string
-          type: array
-          title: Filenames
-          description: Image filenames rendered as equal-width columns (e.g. ['affinity.svg'])
-        caption:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Caption
-      type: object
-      required:
-      - title
-      title: CardContentFigure
-      description: 'One figure in the ''Data analysis'' section.
-
-
-        "One figure" = one title + one caption, but may include multiple
-
-        side-by-side images via `filenames` — one image = full-width, N images
-
-        = N equal columns.'
+    ProductKind:
+      type: string
+      enum:
+      - consortium
+      - exclusive
+      - licensable
+      - open-source
+      title: ProductKind
+      description: "Category that a `product_types` row belongs to.\n\nStored on `ProductTypeEnum.kind`. Drives access control:\n\n- `open-source` bypasses license and subscription checks.\n- `consortium` gates access behind a `ProductSubscription` scoped to\n  the product (with `product_release.release_date` as the subscriber\n  gate); per-block `dataset_licenses` rows grant perpetual access.\n- `licensable` has no subscription path; access requires a\n  `dataset_licenses` row. Any number of companies can be licensed.\n- `exclusive` has no subscription path AND restricts licensing to a\n  single company — the dataset's `designer`. Exclusive blocks are\n  also always hidden from non-licensees (the\n  `metadata_visible_to_public` flag is ignored)."
     CardContentStatSubs:
       properties:
         a_size:
@@ -788,15 +801,6 @@ components:
       type: object
       title: CardContentStatSubs
       description: Per-stat subtitle text shown beneath the stats row.
-    ProductKind:
-      type: string
-      enum:
-      - consortium
-      - exclusive
-      - licensable
-      - open-source
-      title: ProductKind
-      description: "Category that a `product_types` row belongs to.\n\nStored on `ProductTypeEnum.kind`. Drives access control:\n\n- `open-source` bypasses license and subscription checks.\n- `consortium` gates access behind a `ProductSubscription` scoped to\n  the product (with `product_release.release_date` as the subscriber\n  gate); per-block `dataset_licenses` rows grant perpetual access.\n- `licensable` has no subscription path; access requires a\n  `dataset_licenses` row. Any number of companies can be licensed.\n- `exclusive` has no subscription path AND restricts licensing to a\n  single company — the dataset's `designer`. Exclusive blocks are\n  also always hidden from non-licensees (the\n  `metadata_visible_to_public` flag is ignored)."
     DatasetGetResponse:
       properties:
         dataset:
@@ -807,24 +811,17 @@ components:
       - dataset
       title: DatasetGetResponse
       description: Response from GET /datasets/{id} endpoint.
-    DatacardResponse:
+    DatasetFileUrlResponse:
       properties:
-        exec:
-          $ref: '#/components/schemas/ExecCardContent'
-        ml:
-          $ref: '#/components/schemas/MlCardContentResponse'
-        bio:
-          $ref: '#/components/schemas/BioCardContent'
+        url:
+          type: string
+          title: Url
+          description: Pre-signed S3 URL for the file
       type: object
-      title: DatacardResponse
-      description: 'Response from GET /datasets/{id}/datacard endpoint.
-
-
-        Same shape as CardContent — one sub-object per detail-page tab (`exec`,
-
-        `ml`, `bio`) — except `ml` is the served variant, enriched with the
-
-        S3-derived `schema_columns` (see `MlCardContentResponse`).'
+      required:
+      - url
+      title: DatasetFileUrlResponse
+      description: Response from GET /datasets/{id}/files/{filename} endpoint.
     DataMode:
       properties:
         name:
@@ -846,6 +843,100 @@ components:
       - file_type
       title: DataMode
       description: A data mode available for a dataset.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CardContentNoiseSignal:
+      properties:
+        label:
+          type: string
+          title: Label
+        value:
+          type: string
+          title: Value
+        sub:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sub
+      type: object
+      required:
+      - label
+      - value
+      title: CardContentNoiseSignal
+      description: One stat card in the 'Noise & signal' section.
+    CardContentDataView:
+      properties:
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+        mode:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mode
+      type: object
+      required:
+      - name
+      - description
+      title: CardContentDataView
+      description: 'One item in the ''Data views'' section.
+
+
+        ``mode`` is the view''s data-pair handle token (e.g. ``source``, ``ml``): the
+
+        admin editor stores each view''s S3 pair as ``data.<mode>.csv.gz`` /
+
+        ``data.<mode>.schema.json`` and the public API serves it under that mode. The
+
+        portal detail page itself ignores it.'
+    CardContentUseCase:
+      properties:
+        title:
+          type: string
+          title: Title
+        description:
+          type: string
+          title: Description
+      type: object
+      required:
+      - title
+      - description
+      title: CardContentUseCase
+      description: One row of the 'Use cases unlocked' section.
+    ExecCardContent:
+      properties:
+        scientific_value:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Scientific Value
+        use_cases:
+          items:
+            $ref: '#/components/schemas/CardContentUseCase'
+          type: array
+          title: Use Cases
+        differentiations:
+          items:
+            $ref: '#/components/schemas/CardContentTitleBody'
+          type: array
+          title: Differentiations
+        stat_subs:
+          anyOf:
+          - $ref: '#/components/schemas/CardContentStatSubs'
+          - type: 'null'
+      type: object
+      title: ExecCardContent
+      description: Fields rendered on the dataset's Executive Summary tab.
     DatasetSchemaResponse:
       properties:
         dtype:
@@ -872,78 +963,6 @@ components:
       - dtype
       title: DatasetSchemaResponse
       description: Response from GET /datasets/{id}/schema endpoint.
-    CardContentTitleBody:
-      properties:
-        title:
-          type: string
-          title: Title
-        body:
-          type: string
-          title: Body
-      type: object
-      required:
-      - title
-      - body
-      title: CardContentTitleBody
-      description: A {title, body} item — used for differentiation and key findings.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    CardContentUseCase:
-      properties:
-        title:
-          type: string
-          title: Title
-        description:
-          type: string
-          title: Description
-      type: object
-      required:
-      - title
-      - description
-      title: CardContentUseCase
-      description: One row of the 'Use cases unlocked' section.
-    CardContentSchemaColumn:
-      properties:
-        name:
-          type: string
-          title: Name
-        type:
-          type: string
-          title: Type
-        description:
-          type: string
-          title: Description
-      type: object
-      required:
-      - name
-      - type
-      - description
-      title: CardContentSchemaColumn
-      description: One row of the 'Schema (key columns)' table.
     BioCardContent:
       properties:
         biological_system:
@@ -982,69 +1001,50 @@ components:
       - objects
       title: DatasetListResponse
       description: Response from GET /datasets endpoint.
-    CardContentNoiseSignal:
+    DatacardResponse:
       properties:
-        label:
+        exec:
+          $ref: '#/components/schemas/ExecCardContent'
+        ml:
+          $ref: '#/components/schemas/MlCardContentResponse'
+        bio:
+          $ref: '#/components/schemas/BioCardContent'
+      type: object
+      title: DatacardResponse
+      description: 'Response from GET /datasets/{id}/datacard endpoint.
+
+
+        Same shape as CardContent — one sub-object per detail-page tab (`exec`,
+
+        `ml`, `bio`) — except `ml` is the served variant, enriched with the
+
+        S3-derived `schema_columns` (see `MlCardContentResponse`).'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
           type: string
-          title: Label
-        value:
+          title: Message
+        type:
           type: string
-          title: Value
-        sub:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Sub
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
       required:
-      - label
-      - value
-      title: CardContentNoiseSignal
-      description: One stat card in the 'Noise & signal' section.
-    ExecCardContent:
-      properties:
-        scientific_value:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Scientific Value
-        use_cases:
-          items:
-            $ref: '#/components/schemas/CardContentUseCase'
-          type: array
-          title: Use Cases
-        differentiations:
-          items:
-            $ref: '#/components/schemas/CardContentTitleBody'
-          type: array
-          title: Differentiations
-        stat_subs:
-          anyOf:
-          - $ref: '#/components/schemas/CardContentStatSubs'
-          - type: 'null'
-      type: object
-      title: ExecCardContent
-      description: Fields rendered on the dataset's Executive Summary tab.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    DatasetFileUrlResponse:
-      properties:
-        url:
-          type: string
-          title: Url
-          description: Pre-signed S3 URL for the file
-      type: object
-      required:
-      - url
-      title: DatasetFileUrlResponse
-      description: Response from GET /datasets/{id}/files/{filename} endpoint.
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     HTTPBearer:
       type: http
