@@ -64,25 +64,124 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-A-Alpha Bio is a Seattle biotechnology company that measures, predicts and engineers protein-protein
-interactions. Its experimental platform **AlphaSeq** reprograms yeast mating to quantify millions of protein-protein
-binding affinities in a single experiment; its computational platform **AlphaBind** predicts and optimizes
-antibody-antigen binding from sequence. In July 2026 the company launched **Atlas**, a data platform publishing
-ML-ready protein interaction "Data Blocks" for licensing, custom on-demand data generation, and a quarterly-release
-consortium whose founding members include GSK, Boltz, Cradle and Dyno Therapeutics.
+A-Alpha Bio is a Seattle biotechnology company, founded in 2017 out of the University of Washington's Institute for Protein Design and Center for Synthetic Biology, that measures, predicts and engineers protein-protein interactions. Its experimental platform AlphaSeq reprograms yeast mating to quantify millions of protein-protein binding affinities in a single experiment, and its computational platform AlphaBind is a domain-specific deep-learning model trained on hundreds of millions of those affinity measurements to predict and optimize antibody-antigen binding from sequence. In July 2026 the company launched Atlas, a web platform and data ecosystem that publishes ML-ready protein interaction "Data Blocks" for licensing, custom on-demand data generation, and a quarterly-release Atlas Consortium whose founding members include GSK, Boltz, Cradle and Dyno Therapeutics. Atlas is backed by a public HTTP API — the Data Product API at api.atlas.aalphabio.com — which serves dataset discovery, dataset metadata and structured Data Cards anonymously, and gates CSV data, CSV schemas and structure (.cif) files behind a bearer token issued through AWS Cognito sign-in.
 
-## API surface
+**Areas:** protein-interactions · Biotechnology · Drug Discovery · Antibody Engineering · Synthetic Biology · Machine Learning · Training Data · Data Licensing · Life Sciences · Datasets · Protein Design · Bioinformatics
 
-Atlas is backed by a public HTTP API — the **Atlas Data Product API** at `https://api.atlas.aalphabio.com`, which
-serves a live OpenAPI 3.1.0 document at `/openapi.json`. Nine read operations over Data Blocks. Dataset discovery,
-dataset metadata and structured Data Cards answer **anonymously**; CSV data, CSV schemas and structure (`.cif`) files
-require a bearer token issued through AWS Cognito sign-in.
+## A-Alpha Bio on APIs.io
 
-The API is not linked from any A-Alpha Bio documentation — it was found by reading the preconnect hint in the Atlas
-web app's HTML shell. There is no developer portal, no `/llms.txt`, no `/.well-known/` document, no MCP server, no
-agent card, no status page and no changelog.
+Everything profiled for A-Alpha Bio is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/a-alpha-bio/](https://apis.io/providers/a-alpha-bio/)** — or go straight to one of the APIs or properties below.
 
-- Website — https://www.aalphabio.com/
-- Atlas — https://atlas.aalphabio.com/
-- GitHub — https://github.com/A-Alpha-Bio
-- Blog — https://aalphabio.substack.com/
+### APIs (1)
+
+- [A-Alpha Bio Datasets API](https://apis.io/apis/a-alpha-bio/a-alpha-bio-datasets-api/) — The Datasets API from A-Alpha Bio — 9 operation(s) for datasets.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [a-alpha-bio-mcp.yml](https://apis.io/servers/a-alpha-bio/a-alpha-bio-mcp-yml/)
+
+#### JSON Schema (3)
+
+The data models the API reads and writes.
+
+- [DatacardResponse](https://apis.io/schemas/a-alpha-bio/a-alpha-bio-datacard/)
+- [DatasetSchemaResponse](https://apis.io/schemas/a-alpha-bio/a-alpha-bio-dataset/)
+- [DatasetItem](https://apis.io/schemas/a-alpha-bio/a-alpha-bio-dataset-item/)
+
+#### Examples (3)
+
+Example requests and responses.
+
+- [A Alpha Bio Get Dataset Datacard Response](https://apis.io/examples/a-alpha-bio/a-alpha-bio-get-dataset-datacard-response/)
+- [A Alpha Bio Get Dataset Response](https://apis.io/examples/a-alpha-bio/a-alpha-bio-get-dataset-response/)
+- [A Alpha Bio List Datasets Response](https://apis.io/examples/a-alpha-bio/a-alpha-bio-list-datasets-response/)
+
+#### Collections (1)
+
+Postman and Open Collection request collections.
+
+- [A Alpha Bio Datasets API](https://apis.io/collections/a-alpha-bio/open-a-alpha-bio-datasets-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [A Alpha Bio Atlas Datasets Overlay](https://apis.io/overlays/a-alpha-bio/a-alpha-bio-atlas-datasets-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [A Alpha Bio Authentication](https://apis.io/security/a-alpha-bio/a-alpha-bio-authentication/)
+- [A Alpha Bio Domain Security](https://apis.io/security/a-alpha-bio/a-alpha-bio-domain-security/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.aalphabio.com/)
+- [Sign up](https://atlas.aalphabio.com/)
+- [Support](https://www.aalphabio.com/contact/)
+- [Blog](https://aalphabio.substack.com/)
+- [Terms of service](https://www.aalphabio.com/terms-of-service/)
+- [Privacy policy](https://www.aalphabio.com/privacy-notice/)
+- [GitHub](https://github.com/A-Alpha-Bio)
+
+## API Evangelist rating
+
+**Kin Score 33.4** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 79.5 |
+| Contract quality | 55.4 |
+| Contract governance | 4.5 |
+| Operational transparency | 2.6 |
+| Developer ergonomics | 28.0 |
+| Access clarity | 21.1 |
+
+**Agent readiness 27.1** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | na |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | na |
+| Error Semantics | verified |
+| OpenAPI Examples | documented (partial credit) |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | na |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 18.4** — Health
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/a-alpha-bio/](https://apis.io/providers/a-alpha-bio/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for A-Alpha Bio: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/a-alpha-bio/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
